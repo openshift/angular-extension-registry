@@ -1,0 +1,10 @@
+<select
+  name="select"
+  class="extension-select extension-{{index}} {{item.className}}">
+  <option
+    ng-repeat="option in item.options"
+    value="{{option.value}}"
+    class="extension-option extension-option-{{$index}} {{option.className}}">
+    {{option.label}}
+  </option>
+</select>

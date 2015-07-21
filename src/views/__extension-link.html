@@ -1,0 +1,15 @@
+<a ng-if="!item.fn"
+   ng-href="{{item.link}}"
+   target="{{item.target}}"
+   title="{{item.displayName}}"
+   class="extension-link extension-{{index}} {{item.className}}">
+   {{item.displayName}}
+ </a>
+
+<a ng-if="item.fn"
+   ng-href="#"
+   ng-click="item.fn()"
+   title="{{item.displayName}}"
+   class="extension-link extension-{{index}} {{item.className}}">
+   {{item.displayName}}
+ </a>

@@ -1,0 +1,21 @@
+{
+  "name": "angular-extension-registry",
+  "version": "0.0.1",
+  "authors": [
+    "benjaminapetersen <admin@benjaminapetersen.me>"
+  ],
+  "description": "An angular module allowing arbitrary data to be injected & rendered in UI",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "angular": "~1.4.1",
+    "layout.attrs": "~1.0.0",
+    "angular-sanitize": "~1.4.3"
+  }
+}

@@ -1,0 +1,11 @@
+<div class="extension-output extension-list">
+  <div
+    ng-repeat="item in items track by $index"
+    class="extension-repeater">
+    <!-- todo: how to pass each item to the renderer -->
+    <extension-renderer
+      class="extension-renderer extension-item"
+      item="item"
+      index="$index"></extension-renderer>
+  </div>
+</div>
