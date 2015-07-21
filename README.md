@@ -217,6 +217,12 @@ These templates will need to be registered via Angular's templateCache.  The bes
 is with a build tool, such as gulp's `gulp-angular-templatecache` plugin.
 
 
+### See the demo
+
+Clone the project and run `npm install` and `bower install`.  Spin up a simple server in the root
+directory however you see fit, such as `python -m SimpleHTTPServer` and navigate to the `/demo`
+directory.  Experiment with the simple app registry setup.
+
 
 <!-- FUTURE STUFF
 
