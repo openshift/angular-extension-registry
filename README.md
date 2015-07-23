@@ -1,7 +1,8 @@
 # angular-extension-registry
 An angular module allowing arbitrary data to be injected &amp; rendered in UI.  There is a
 data input component, and a data output component.  The `extensionInputProvider` handles input,
-allowing you to name registries and assign configuration data to these registries.  The `extensionOutput` directive (`<extension-output>`) handles the output by generating HTML representation.
+allowing you to name registries and assign configuration data to these registries.  The `extensionOutput`
+directive (`<extension-output>`) handles the output by generating HTML representation.
 It is an HTML element (or attribute) you can place in your view files to
 compose a rendering of data.  It has two additional attributes for configuring the output.
 The `extension-name="name name2"` will reference one or more named registries, and
@@ -42,7 +43,7 @@ angular.module('myapp', [
         link: 'http://google.com',
         target: '_blank',
         displayName: 'Google',
-        className: 'external'
+        className: 'external my-link'
       },
     ];
     // then register it to a named endpoint

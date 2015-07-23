@@ -7,14 +7,11 @@ angular.module('extension-registry', [
   // currently nothing to do here.
 });
 
-// strangely this must be provided as a separate module
-// so that it can be injected into the extension-registry provider
 angular.module('extension-registry-utils', [
 
 ])
-
-// aaaah, problem.
-// providers CANNOT have dependencies.
+// ONLY constants are available to a provider,
+// thus, this collection of functions is a constant.
 .constant('extensionRegistryUtils', (function() {
 
   var // utils
@@ -136,14 +133,10 @@ angular.module('extension-registry-utils', [
 
 angular.module('extension-registry')
 
-// extensionInputProvider
-// - allows user to add data sets to an internal registry
 .provider('extensionInput', [
   'extensionRegistryUtils',
   function(utils) {
     var registry = {},
-        // tried Date.now(), but functions run too fast and will clobber data
-        // keyStart needs to simply be an arbitrary number incremented by 1.
         keyStart = 1000,
         split = utils.split,
         each = utils.each,
@@ -155,36 +148,21 @@ angular.module('extension-registry')
         ownKeys = utils.ownKeys,
         toArray = utils.toArray;
 
-    // register a new extension, arbitrary name
     var register = function(name, list) {
           var key = keyStart++;
           if(!registry[name]) {
             registry[name] = {};
           }
           if(list) {
-            // keeping each set of registries in separate namespaces
             registry[name][key] = list;
           }
           return {
-            // simplest for user, return a function to de-register what they just registered
             deregister: function() {
               delete registry[name][key];
             }
           };
         },
-        // return a subset of items
         get = function(name, filters) {
-          // impl allowing a single name on a node
-          // var keys = ownKeys(registry[name]),
-          //     items = reduce(keys, function(memo, next) {
-          //       return memo.concat(registry[name][next]);
-          //     }, []),
-          //     filtered = filter(items, function(item, index, list) {
-          //       if(contains(filters, item.type)) {
-          //         return item;
-          //       }
-          //     });
-          // impl allowing multiple names on a single node
           var names = split(name, ' '),
               registrations = map(names, function(n) {
                 return registry[n];
@@ -204,17 +182,13 @@ angular.module('extension-registry')
           return filtered;
         };
 
-    // register data in the configuration phase
     this.register = register;
 
     this.$get = [
         '$log',
         function($log) {
           return {
-            // can register data in the run phase as well
             register: register,
-            // get a registry by its name
-            // filter by type, which may be a list.
             get: get
           };
         }];
@@ -223,7 +197,6 @@ angular.module('extension-registry')
 
 angular.module('extension-registry')
   .directive('extensionOutput', function() {
-
     return {
       restrict: 'AE',
       scope: true,
@@ -233,8 +206,6 @@ angular.module('extension-registry')
         '$scope',
         'extensionInput',
         function($scope, extensionInput) {
-
-          // use the attrs to filter out the registry,
           this.initialize = function(name, filters) {
             $scope.items = extensionInput.get(name, filters);
           };
@@ -249,12 +220,6 @@ angular.module('extension-registry')
   });
 
 angular.module('extension-registry')
-  // directive for each individual item to render
-  // TODO:
-  // - idea about dynamic templates
-  // - http://onehungrymind.com/angularjs-dynamic-templates/
-  // - need to be able to change templates based on type passed in configuration objects
-  //
   .directive('extensionRenderer', function() {
     return {
       restrict: 'AE',
@@ -263,6 +228,7 @@ angular.module('extension-registry')
         index: '='
       },
       templateUrl: '__extension-renderer.html',
+      // TODO: may remove controller/link, there is nothing special about the renderer yet
       controller: [function() {}],
       link: function($scope, $elem, $attrs, ctrl) {
         // var item = $attrs.item;

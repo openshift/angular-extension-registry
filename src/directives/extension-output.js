@@ -1,6 +1,5 @@
 angular.module('extension-registry')
   .directive('extensionOutput', function() {
-
     return {
       restrict: 'AE',
       scope: true,
@@ -10,8 +9,6 @@ angular.module('extension-registry')
         '$scope',
         'extensionInput',
         function($scope, extensionInput) {
-
-          // use the attrs to filter out the registry,
           this.initialize = function(name, filters) {
             $scope.items = extensionInput.get(name, filters);
           };

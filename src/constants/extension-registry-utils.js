@@ -1,11 +1,8 @@
-// strangely this must be provided as a separate module
-// so that it can be injected into the extension-registry provider
 angular.module('extension-registry-utils', [
 
 ])
-
-// aaaah, problem.
-// providers CANNOT have dependencies.
+// ONLY constants are available to a provider,
+// thus, this collection of functions is a constant.
 .constant('extensionRegistryUtils', (function() {
 
   var // utils
