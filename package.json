@@ -5,6 +5,10 @@
   "authors": [
     "benjaminapetersen <admin@benjaminapetersen.me>"
   ],
+  "main" : [
+    "dist/angular-extension-registry.min.js",
+    "dist/compiled-templates.js"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
