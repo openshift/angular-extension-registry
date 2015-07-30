@@ -6,11 +6,6 @@ angular.module('extension-registry')
         item: '=',
         index: '='
       },
-      templateUrl: '__extension-renderer.html',
-      // TODO: may remove controller/link, there is nothing special about the renderer yet
-      controller: [function() {}],
-      link: function($scope, $elem, $attrs, ctrl) {
-        // var item = $attrs.item;
-      }
+      templateUrl: '__extension-renderer.html'
     };
   });

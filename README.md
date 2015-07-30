@@ -27,6 +27,11 @@ Then require the module in your app.  This is done in the typical Angular fashio
 angular.module('myapp', [
   'extension-registry'
 ])
+```
+
+Provide data during the initialization phase via the provider:
+
+```javascript
 // then configure via the extensionInputProvider
 .config([
   'extensionInputProvider',
@@ -51,6 +56,47 @@ angular.module('myapp', [
   }
 ]);
 ```
+
+Or during the run phase via the service:
+
+```javascript
+angular.module('myapp')
+  .factory('fooExtensionFactory', function() {
+    return [
+      {
+        type: 'text',
+        output: 'This is text only.',
+        className: 'extension extension-pod'
+      },
+      {
+        type: 'link',
+        link: 'http://openshift.com',
+        className: 'external my-link',
+        displayName: 'Red Hat OpenShift'
+      }
+    ];
+  })
+  .run([
+    '$timeout',
+    'fooExtensionFactory',
+    'extensionInput',
+    function($timeout, fooExtensionFactory, extensionInput) {
+
+      extensionInput.register('main', fooExtensionFactory);
+
+      // simulate time passing, as if API call, then add additional data
+      // directives will be notified of new data & will update if necessary
+      $timeout(function() {
+        extensionInput.register('main', fooExtensionFactory);
+      }, 1000);
+
+    }
+  ]);
+
+
+```
+
+
 ```html
 <!--
   then drop an instance of the output directive into your html file,
@@ -227,23 +273,7 @@ directory.  Experiment with the simple app registry setup.
 
 <!-- FUTURE STUFF
 
-## TODOs
-- add extension-limit attribute to stop output @ a certain # of items
-- get default value working in the select box!
-- re-trigger a render of the directives if data changes
-  - prob need to clarify ways to update data @ runtime to make this relevant
-- tests
-- update the renderer template?  let users do that? what if they want to flexbox
-  the items to be in a horizontal list, not vertical?
+## TODOs now in github issues.
 
-## Future TODOs (v1.1.0+)
-- adding custom templates?
-- adding services access?
-- add an ability to order items?
-
-
-### Other questions and things
-- truncate text if too long?
-- # of items limit?
 
 -->

@@ -1,6 +1,6 @@
 {
   "name": "angular-extension-registry",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "description": "An angular module allowing arbitrary data to be injected & rendered in UI",
   "authors": [
     "benjaminapetersen <admin@benjaminapetersen.me>"

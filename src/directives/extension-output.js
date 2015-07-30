@@ -11,6 +11,14 @@ angular.module('extension-registry')
         function($scope, extensionInput) {
           this.initialize = function(name, filters) {
             $scope.items = extensionInput.get(name, filters);
+
+            var registry = extensionInput.subscribe(function() {
+              $scope.items = extensionInput.get(name, filters);
+            });
+
+            $scope.$on('$destroy', function() {
+              registry.unsubscribe();
+            });
           };
         }
       ],
