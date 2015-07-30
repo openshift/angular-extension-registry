@@ -225,6 +225,31 @@ registries.forEach(function(registry) {
 fooData2Registry.deregister();
 ```
 
+### Using other services
+
+One example of using other services in your extension is this:
+
+```javascript
+.run(function($timeout, fooService, extensionInput) {
+
+  // registering a link that makes use of an external service
+  extensionInput.register('sidebar-left', [
+    {
+      type: 'link',
+      link: 'http://example.com',
+      displayName: 'some link that does fancy stuff',
+      fn: function() {
+        fooService.doAsyncThing()
+                    .then(function() {
+                      // do other stuff....
+                    });
+      }
+    }
+  ]);
+});
+
+```
+
 
 ### Directive for output
 
