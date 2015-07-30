@@ -28,8 +28,10 @@ angular.module('myapp')
         link: 'http://openshift.com',
         className: 'foo bar baz test',
         displayName: 'link with fn',
-        fn: function() {
+        fn: function(args) {
+          list = JSON.parse(args);
           alert('you have clicked this ' + (clickCount++) + ' times');
+          console.log('args', list[0], list[1]);
         }
       },
       {
