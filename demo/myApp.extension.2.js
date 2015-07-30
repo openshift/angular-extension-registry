@@ -13,8 +13,8 @@ angular.module('myapp')
         link: 'http://openshift.com',
         className: 'extension extension-pod',
         displayName: 'via service #2',
-        fn: function() {
-          console.log('you have clicked this ' + (clickCount++) + ' times');
+        fn: function(context) {
+          console.log('you clicked this', context);
         }
       }
     ];

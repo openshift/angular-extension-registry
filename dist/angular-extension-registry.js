@@ -219,16 +219,20 @@ angular.module('extension-registry')
   .directive('extensionOutput', function() {
     return {
       restrict: 'AE',
-      scope: true,
+      scope: {
+        name: '@name',
+        filters: '@filters',
+        context: '@context'
+      },
       transclude: true,
       templateUrl: '__extension-output.html',
       controller: [
         '$scope',
         'extensionInput',
         function($scope, extensionInput) {
-          this.initialize = function(name, filters) {
+          this.initialize = function(name, filters, context) {
             $scope.items = extensionInput.get(name, filters);
-
+            $scope.context = context;
             var registry = extensionInput.subscribe(function() {
               $scope.items = extensionInput.get(name, filters);
             });
@@ -241,8 +245,9 @@ angular.module('extension-registry')
       ],
       link: function($scope, $elem, $attrs, ctrl) {
         var name = $attrs.extensionName,
-            filters = $attrs.extensionTypes && $attrs.extensionTypes.split(' ') || [];
-        ctrl.initialize(name, filters);
+            filters = $attrs.extensionTypes && $attrs.extensionTypes.split(' ') || [],
+            context = $attrs.extensionContext || {};
+        ctrl.initialize(name, filters, context);
       }
     };
   });
@@ -253,7 +258,8 @@ angular.module('extension-registry')
       restrict: 'AE',
       scope: {
         item: '=',
-        index: '='
+        index: '=',
+        context: '='
       },
       templateUrl: '__extension-renderer.html'
     };

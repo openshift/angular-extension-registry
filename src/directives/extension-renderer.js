@@ -4,7 +4,8 @@ angular.module('extension-registry')
       restrict: 'AE',
       scope: {
         item: '=',
-        index: '='
+        index: '=',
+        context: '='
       },
       templateUrl: '__extension-renderer.html'
     };

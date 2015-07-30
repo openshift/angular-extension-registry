@@ -40,11 +40,16 @@
       </div>
       <div flex layout column grow="3" class="pad-md" outline>
 
+        <div ng-controller="fooController">
         <p>Extension:main</p>
+        <p>(using args attrib)</p>
         <div
           extension-output
           extension-name="main"
-          extension-types="text link sanitize select"></div>
+          extension-types="text link sanitize select"
+          extension-args="{{items}}"></div>
+        </div>
+
 
         <p>Extensions:foo &apm; bar</p>
         <p>but only select boxes</p>
@@ -63,6 +68,7 @@
         </ul>
       </div>
     </div>
+
     <div
       layout
       axis="center center"
@@ -74,17 +80,17 @@
 <!-- vendor -->
 <script src="../bower_components/angular/angular.js"></script>
 <script src="../bower_components/angular-sanitize/angular-sanitize.js"></script>
-<!-- angular-extension-manager components
+<!-- angular-extension-manager components -->
 <script src="../src/extension-registry.js"></script>
 <script src="../src/constants/extension-registry-utils.js"></script>
 <script src="../src/services/extension-input-provider.js"></script>
 <script src="../src/directives/extension-output.js"></script>
 <script src="../src/directives/extension-renderer.js"></script>
-<script src="../dist/compiled-templates.js"></script> -->
-<!-- minified -->
+<script src="../dist/compiled-templates.js"></script>
+<!-- minified
 <script src="../dist/angular-extension-registry.min.js"></script>
 <script src="../dist/compiled-templates.js"></script>
-
+-->
 <!-- app usage -->
 <script src="./myApp.js"></script>
 <script src="./myApp.extension.1.js"></script>

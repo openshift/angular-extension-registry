@@ -24,5 +24,40 @@ angular.module('myapp', [
 
 
   }
+])
+.service('fooService', [
+  '$q',
+  function($q) {
+    var items = [
+      {
+        foo: 'foo',
+        bar: 'bar'
+      },
+      {
+        foo: 'foo 2',
+        bar: 'bar 2'
+      }
+    ];
+
+    return {
+      get: function() {
+        // simulate promise
+        return $q.when(items);
+      }
+    }
+  }
+])
+
+.controller('fooController', [
+  '$scope',
+  'fooService',
+  function($scope, fooService) {
+    fooService.get()
+              .then(function(items) {
+                angular.extend($scope, {
+                  items: items
+                });
+              });
+  }
 ]);
 
