@@ -270,10 +270,3 @@ Clone the project and run `npm install` and `bower install`.  Spin up a simple s
 directory however you see fit, such as `python -m SimpleHTTPServer` and navigate to the `/demo`
 directory.  Experiment with the simple app registry setup.
 
-
-<!-- FUTURE STUFF
-
-## TODOs now in github issues.
-
-
--->
