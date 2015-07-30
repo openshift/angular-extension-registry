@@ -27,7 +27,6 @@ angular.module('extension-registry')
         }
       ],
       link: function($scope, $elem, $attrs, ctrl) {
-        console.log($attrs);
         var name = $attrs.extensionName,
             filters = $attrs.extensionTypes && $attrs.extensionTypes.split(' ') || [],
             args = $attrs.extensionArgs || {};
