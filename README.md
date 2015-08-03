@@ -281,7 +281,7 @@ One example of using other services in your extension is this:
 ```
 
 
-### Directive for output
+### Directive for Output
 
 The output directive can be configured in numerous ways.  The simplest is to
 simply a single name & type:
@@ -308,7 +308,7 @@ of the provided types:
 ```
 
 
-### Template usage / overrides
+### Template Usage / Overrides
 
 The `/src/views/` directory houses the source html files used to generate templates.  These
 are compiled into `/dist/compiled-templates.js`.  The script can be included to use the default
@@ -319,7 +319,7 @@ These templates will need to be registered via Angular's templateCache.  The bes
 is with a build tool, such as gulp's `gulp-angular-templatecache` plugin.
 
 
-### See the demo
+### See the Demo
 
 Clone the project and run `npm install` and `bower install`.  Spin up a simple server in the root
 directory however you see fit, such as `python -m SimpleHTTPServer` and navigate to the `/demo`
