@@ -9,7 +9,7 @@ The `extension-name="name name2"` will reference one or more named registries, a
 the `extension-types="text link select html"` attribute lets you filter the types of outputs
 rendered for that particular instance.  See the usage section below for an simple example.
 
-## Usage
+## Basic Usage
 
 Include the minified script in your html file.  If you want to use the pre-compiled default
 templates, include the additional template script.
@@ -121,6 +121,7 @@ An example with a service:
 ```
 
 
+The basic output directive:
 
 ```html
 <!--
@@ -136,7 +137,10 @@ An example with a service:
 
 ```
 
-### Registering multiple named inputs
+## Additional Usage Options
+
+
+### Registering Multiple Named Inputs
 
 Register an extension name like this:
 
@@ -163,7 +167,7 @@ extensionInputProvider.register('bar');
 extensionInputProvider.register('shizzle');
 ```
 
-### Providing data to a named registry
+### Providing Data to a Named Registry
 
 Each time you call `.register()` you can provide a data list (array)
 like this:
@@ -188,7 +192,7 @@ extensionInputProvider.register('main', data2);
 
 ```
 
-### Keeping the config block clean and orderly
+### Keeping the Config Block Clean and Orderly
 
 Angular allows multiple `.config` blocks to be defined for a module.  This can be done in
 one file or in many.  It may be beneficial to break each named registry into a separate
@@ -219,7 +223,7 @@ angular.module('myapp', [
 ```
 
 
-### Deregistering data for a registry
+### Deregistering Data for a Registry
 
 Each time you register data to a registry, the `.register()` function will return an object that
 has a `.deregister()` function bound to that particular data set, allowing you to unregister that
@@ -250,7 +254,7 @@ registries.forEach(function(registry) {
 fooData2Registry.deregister();
 ```
 
-### Using other services
+### Using Other Services
 
 One example of using other services in your extension is this:
 
@@ -264,7 +268,8 @@ One example of using other services in your extension is this:
       link: 'http://example.com',
       displayName: 'some link that does fancy stuff',
       fn: function() {
-        fooService.doAsyncThing()
+        return fooService
+                    .doAsyncThing()
                     .then(function() {
                       // do other stuff....
                     });
