@@ -96,6 +96,31 @@ angular.module('myapp')
 
 ```
 
+An example with a service:
+
+```javascript
+.run([
+    '$q',
+    'dataProvider1',
+    'dataProvider2',
+    function($q, dataProvider1, dataProvider2, extensionInput) {
+
+      $q.when([
+        dataProvider1.get(),
+        dataProvider2.get()
+      ])
+      .then(function(data1, data2) {
+        extensionInput.register('endpoint1', [
+          // make objects with the data...
+        ]);
+      });
+
+    }
+  ]);
+
+```
+
+
 
 ```html
 <!--
