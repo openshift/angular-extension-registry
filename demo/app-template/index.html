@@ -1,0 +1,210 @@
+<html ng-app="myapp">
+<head>
+  <title>Angular Extension Registry</title>
+  <!-- google fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en' rel='stylesheet' type='text/css'>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- layout engine -->
+  <link rel="stylesheet" href="../../bower_components/layout.attrs/dist/layout.attrs.css" />
+  <!-- theme -->
+  <link rel="stylesheet" href="./style.css" />
+  <style>
+    [outline] {
+     outline: 1px solid #990000;
+    }
+    extension-renderer {
+      outline: 1px dashed #990000;
+      background-color: #EDBCBC;
+    }
+    .bg-blue {
+      background-color: rgb(78, 119, 182);
+    }
+  </style>
+</head>
+<body fit height-max class="bg-gray-lt font-roboto text-gray-dk">
+
+
+
+  <div layout row mobile="column" outline>
+
+    <div flex layout column grow="1" outline>
+      <img src="http://placehold.it/400x150&amp;text=Logo">
+      <div outline class="pad-md"><strong>ROOMS</strong></div>
+      <div outline class="pad-md">Slam Book</div>
+      <div outline class="pad-md">Slam Book</div>
+      <div outline class="pad-md">Slam Book</div>
+      <div outline class="pad-md">Slam Book</div>
+      <div outline class="pad-md">Slam Book</div>
+      <div outline class="pad-md">Slam Book</div>
+      <div outline class="pad-md">Slam Book</div>
+      <div outline class="pad-md">Slam Book</div>
+      <div outline class="pad-md">Slam Book</div>
+
+
+      <div layout row outline>
+        <img src="http://placehold.it/30x30" class="pad-sm">
+        <div flex layout column axis="start center" class="pad-sm">
+          <div><strong>Name</strong></div>
+          <div>email@somewhere.com</div>
+        </div>
+        <div flex layout axis="center center" class="pad-sm">
+          <button class="pad-sm">edit</button>
+          <button class="pad-sm">delete</button>
+        </div>
+      </div>
+
+      <div flex></div>
+
+      <!--<div flex></div>-->
+      <div self-end outline class="pad-md">Slam Book</div>
+    </div><!-- /sidebar -->
+
+    <div flex layout column grow="3" outline>
+
+      <div layout row outline class="bg-blue">
+        <div flex outline class="pad-lg">Link 1</div>
+        <div flex outline class="pad-lg">Link 2</div>
+        <div flex outline class="pad-lg">Link 3</div>
+      </div><!-- /blue-bar -->
+
+
+      <div layout row mobile="column" tablet="column" outline outline>
+        <div flex layout column grow="3" outline>
+          <div height-max scrollable>
+
+
+            <div layout column outline>
+              <div layout row axis="start center">
+                <div class="pad-md">
+                  <img src="http://placehold.it/30x30">
+                </div>
+                <h4 >Some Name</h4>
+              </div>
+              <div class="pad-md"><p>This is some text.......</p></div>
+            </div>
+
+            <div layout column outline>
+              <div layout row axis="start center">
+                <div class="pad-md">
+                  <img src="http://placehold.it/30x30">
+                </div>
+                <h4 >Some Name</h4>
+              </div>
+              <div class="pad-md"><p>This is some text.......</p></div>
+            </div>
+
+            <div layout column outline>
+              <div layout row axis="start center">
+                <div class="pad-md">
+                  <img src="http://placehold.it/30x30">
+                </div>
+                <h4 >Some Name</h4>
+              </div>
+              <div class="pad-md"><p>This is some text.......</p></div>
+            </div>
+
+            <div layout column outline>
+              <div layout row axis="start center">
+                <div class="pad-md">
+                  <img src="http://placehold.it/30x30">
+                </div>
+                <h4 >Some Name</h4>
+              </div>
+              <div class="pad-md"><p>This is some text.......</p></div>
+            </div>
+
+            <div layout column outline>
+              <div layout row axis="start center">
+                <div class="pad-md">
+                  <img src="http://placehold.it/30x30">
+                </div>
+                <h4 >Some Name</h4>
+              </div>
+              <div class="pad-md"><p>This is some text.......</p></div>
+            </div>
+
+            <div layout column outline>
+              <div layout row axis="start center">
+                <div class="pad-md">
+                  <img src="http://placehold.it/30x30">
+                </div>
+                <h4 >Some Name</h4>
+              </div>
+              <div class="pad-md"><p>This is some text.......</p></div>
+            </div>
+
+            <div layout column outline>
+              <div layout row axis="start center">
+                <div class="pad-md">
+                  <img src="http://placehold.it/30x30">
+                </div>
+                <h4 >Some Name</h4>
+              </div>
+              <div class="pad-md"><p>This is some text.......</p></div>
+            </div>
+
+            <div layout column outline>
+              <div layout row axis="start center">
+                <div class="pad-md">
+                  <img src="http://placehold.it/30x30">
+                </div>
+                <h4 >Some Name</h4>
+              </div>
+              <div class="pad-md"><p>This is some text.......</p></div>
+            </div>
+
+            <div layout column outline>
+              <div layout row axis="start center">
+                <div class="pad-md">
+                  <img src="http://placehold.it/30x30">
+                </div>
+                <h4 >Some Name</h4>
+              </div>
+              <div class="pad-md"><p>This is some text.......</p></div>
+            </div>
+
+          </div><!-- scrollable -->
+        </div><!-- /content -->
+
+        <div flex layout column height-max grow="1" outline>
+          <div class="pad-md" outline><strong>Heading</strong></div>
+          <div class="pad-md" outline>Person Name</div>
+          <div class="pad-md" outline>Person Name</div>
+          <div class="pad-md" outline>Person Name</div>
+          <div class="pad-md" outline>Person Name</div>
+          <div class="pad-md" outline>Person Name</div>
+          <div class="pad-md" outline>Person Name</div>
+        </div>
+      </div><!-- /right sidebar -->
+
+    </div><!-- /inner -->
+
+  </div><!-- /outer -->
+
+
+
+
+
+
+
+<!-- vendor -->
+<script src="../../bower_components/angular/angular.js"></script>
+<script src="../../bower_components/angular-sanitize/angular-sanitize.js"></script>
+<!-- angular-extension-manager components -->
+<script src="../../src/extension-registry.js"></script>
+<script src="../../src/constants/extension-registry-utils.js"></script>
+<script src="../../src/services/extension-input-provider.js"></script>
+<script src="../../src/directives/extension-output.js"></script>
+<script src="../../src/directives/extension-renderer.js"></script>
+<script src="../../dist/compiled-templates.js"></script>
+<!-- minified
+<script src="../../dist/angular-extension-registry.min.js"></script>
+<script src="../../dist/compiled-templates.js"></script>
+-->
+<!-- app usage -->
+<script src="./myApp.js"></script>
+
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-<a ng-if="!item.fn"
+<a ng-if="!item.onClick"
    ng-href="{{item.link}}"
    target="{{item.target}}"
    title="{{item.displayName}}"
@@ -6,9 +6,9 @@
    {{item.displayName}}
  </a>
 
-<a ng-if="item.fn"
+<a ng-if="item.onClick"
    ng-href="#"
-   ng-click="item.fn(args)"
+   ng-click="item.onClick(args)"
    title="{{item.displayName}}"
    class="extension-link extension-{{index}} {{item.className}}">
    {{item.displayName}}
