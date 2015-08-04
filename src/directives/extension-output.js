@@ -1,24 +1,33 @@
 angular.module('extension-registry')
   .directive('extensionOutput', function() {
     return {
-      restrict: 'AE',
+      restrict: 'EA',
       scope: {
-        extensionName: '@',
-        extensionFilters: '@',
-        extensionArgs: '@'
+        extensionName: '=',
+        extensionFilters: '=',
+        extensionArgs: '='
       },
       transclude: true,
       templateUrl: '__extension-output.html',
       controller: [
         '$scope',
+        '$q',
         'extensionInput',
-        function($scope, extensionInput) {
-          this.initialize = function(name, filters, context) {
-            $scope.items = extensionInput.get(name, filters);
-            $scope.context = context;
-            var registry = extensionInput.subscribe(function() {
-              $scope.items = extensionInput.get(name, filters);
-            });
+        function($scope, $q, extensionInput) {
+          this.initialize = function(name, filters, args) {
+            var resolve = function() {
+              $q.when(extensionInput.get(name, filters, $scope.extensionArgs))
+              .then(function(items) {
+                angular.extend($scope, {
+                  items: items
+                })
+              });
+            }
+
+            resolve();
+            // events for handling new registries
+            // and to clean up when done.
+            var registry = extensionInput.subscribe(resolve);
 
             $scope.$on('$destroy', function() {
               registry.unsubscribe();
@@ -30,6 +39,7 @@ angular.module('extension-registry')
         var name = $attrs.extensionName,
             filters = $attrs.extensionTypes && $attrs.extensionTypes.split(' ') || [],
             args = $attrs.extensionArgs || {};
+        // TODO: track down $attrs[attr] vs $scope[attr] usage.
         ctrl.initialize(name, filters, args);
       }
     };

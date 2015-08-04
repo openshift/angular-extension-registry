@@ -7,6 +7,7 @@ angular.module('extension-registry')
         subscribers = {},
         keyStart = 1000,
         split = utils.split,
+        slice = utils.slice,
         each = utils.each,
         map = utils.map,
         contains = utils.contains,
@@ -16,15 +17,14 @@ angular.module('extension-registry')
         ownKeys = utils.ownKeys,
         toArray = utils.toArray;
 
-    // API methods
-    var // data provider API
-        register = function(name, list) {
+    // methods available in provider && service context
+    var register = function(name, builderFn) {
           var key = keyStart++;
           if(!registry[name]) {
             registry[name] = {};
           }
-          if(list) {
-            registry[name][key] = list;
+          if(builderFn) {
+            registry[name][key] = builderFn;
           }
           each(toArray(subscribers), function(fn) {
             fn && fn();
@@ -34,49 +34,50 @@ angular.module('extension-registry')
               delete registry[name][key];
             }
           };
-        },
-        // consumer API
-        get = function(name, filters) {
-          var names = split(name, ' '),
-              registrations = map(names, function(n) {
-                return registry[n];
-              }),
-              registrationLists = reduce(registrations, function(memo, next, i, list) {
-                var lists = map(ownKeys(next), function(key) {
-                  return next[key];
-                });
-                return memo.concat(flatten(lists));
-              }, []),
-              flattened = flatten(registrationLists),
-              filtered = filter(flattened, function(item, index, list) {
-                if(contains(filters, item.type)) {
-                  return item;
-                }
-              });
-          return filtered;
-        },
-        subscribe = function(fn) {
-          var key = keyStart++;
-          subscribers[key] = fn;
-          return {
-            unsubscribe: function() {
-              delete subscribers[key];
-            }
-          };
         };
 
-    // In the provider context (Angular's initialization phase)
-    // only the register method is useful.
+    // provider context export
     this.register = register;
 
-    // all methods available in service context (Angular's run phase)
+    // service context export
     this.$get = [
         '$log',
-        function($log) {
+        '$q',
+        function($log, $q) {
           return {
             register: register,
-            get: get,
-            subscribe: subscribe
+            get: function(name, filters, args) {
+              var names = split(name, ' '),
+                  registrations = map(names, function(n) {
+                    return registry[n];
+                  }),
+                  registrationLists = reduce(registrations, function(memo, next, i, list) {
+                    var lists = map(ownKeys(next), function(key) {
+                      return next[key](args);
+                    });
+                    return memo.concat(flatten(lists));
+                  }, []),
+                  flattened = flatten(registrationLists);
+              // resolves the promises for objects, then will do the filtering
+              return  $q.all(flattened)
+                        .then(function() {
+                          var args = flatten(slice(arguments));
+                          return filter(args, function(item, index, list) {
+                                  if(contains(filters, item.type)) {
+                                    return item;
+                                  }
+                                });
+                        });
+            },
+            subscribe: function(fn) {
+              var key = keyStart++;
+              subscribers[key] = fn;
+              return {
+                unsubscribe: function() {
+                  delete subscribers[key];
+                }
+              };
+            }
           };
         }];
   }

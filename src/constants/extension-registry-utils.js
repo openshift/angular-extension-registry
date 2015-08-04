@@ -49,11 +49,6 @@ angular.module('extension-registry-utils', [
         }
         return memo;
       },
-      // provide a list, ask if it contains any number of subsequent items
-      // example:
-      // contains([1,2,3,4,5], 3)     // T
-      // contains([1,2,3,4,5], 3,5)   // T
-      // contains([1,2,3,4,5], 7)     // F
       contains = function() {
         var list = arguments[0],
             rest = slice(arguments, 1),

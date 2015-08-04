@@ -1,0 +1,99 @@
+<html ng-app="myapp">
+<head>
+  <title>Angular Extension Registry</title>
+  <!-- google fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en' rel='stylesheet' type='text/css'>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- layout engine -->
+  <link rel="stylesheet" href="../../bower_components/layout.attrs/dist/layout.attrs.css" />
+  <!-- theme -->
+  <link rel="stylesheet" href="./style.css" />
+  <style>
+    [outline] {
+     outline: 1px solid #DDD;
+    }
+    extension-renderer {
+      outline: 1px dashed #990000;
+      background-color: #EDBCBC;
+    }
+  </style>
+</head>
+<body fit height-max class="bg-gray-lt font-roboto text-gray-dk">
+
+
+
+
+  <div fit scrollable layout column outline>
+
+    <div layout axis="center center" outline class="bg-white shadow-bottom-sm pad-lg">
+      <strong>Angular Extension Registry: A template for hacking</strong>
+    </div><!-- /heading -->
+
+    <div flex layout row mobile="column" outline>
+
+      <div flex shrink="3" outline>
+
+       <div class="pad-md">left sidebar</div>
+
+      </div><!-- /sidebar left -->
+
+      <div flex layout row grow="3" tablet="column" mobile="column">
+        <div flex layout column outline class="pad-md">
+
+          <div class="pad-md">1st center column</div>
+
+        </div><!-- /main left -->
+
+        <div flex layout column class="pad-md">
+
+          <div class="pad-md">2nd center column</div>
+
+        </div><!-- /main right -->
+
+      </div><!-- /main -->
+
+
+      <div flex conceal="mobile tablet" outline>
+
+       <div class="pad-md">right sidebar, mobile/tablet hidden</div>
+
+      </div><!-- /sidebar right -->
+
+    </div>
+
+    <div
+      layout row
+      axis="center center"
+      outline
+      class="bg-white shadow-sm pad-lg">
+
+      <div>footer</div>
+
+    </div>
+ </div><!-- /outer wrapper -->
+
+
+
+
+
+<!-- vendor -->
+<script src="../../bower_components/angular/angular.js"></script>
+<script src="../../bower_components/angular-sanitize/angular-sanitize.js"></script>
+<!-- angular-extension-manager components -->
+<script src="../../src/extension-registry.js"></script>
+<script src="../../src/constants/extension-registry-utils.js"></script>
+<script src="../../src/services/extension-input-provider.js"></script>
+<script src="../../src/directives/extension-output.js"></script>
+<script src="../../src/directives/extension-renderer.js"></script>
+<script src="../../dist/compiled-templates.js"></script>
+<!-- minified
+<script src="../../dist/angular-extension-registry.min.js"></script>
+<script src="../../dist/compiled-templates.js"></script>
+-->
+<!-- app usage -->
+<script src="./myApp.js"></script>
+
+
+</body>
+</html>
