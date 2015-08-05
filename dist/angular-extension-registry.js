@@ -58,11 +58,6 @@ angular.module('extension-registry-utils', [
         }
         return memo;
       },
-      // provide a list, ask if it contains any number of subsequent items
-      // example:
-      // contains([1,2,3,4,5], 3)     // T
-      // contains([1,2,3,4,5], 3,5)   // T
-      // contains([1,2,3,4,5], 7)     // F
       contains = function() {
         var list = arguments[0],
             rest = slice(arguments, 1),
@@ -140,6 +135,7 @@ angular.module('extension-registry')
         subscribers = {},
         keyStart = 1000,
         split = utils.split,
+        slice = utils.slice,
         each = utils.each,
         map = utils.map,
         contains = utils.contains,
@@ -149,67 +145,86 @@ angular.module('extension-registry')
         ownKeys = utils.ownKeys,
         toArray = utils.toArray;
 
-    // API methods
-    var // data provider API
-        register = function(name, list) {
+    // methods available in provider && service context
+    var
+        notify = function() {
+          each(toArray(subscribers), function(fn) {
+            fn && fn();
+          });
+        },
+        register = function(name, builderFn) {
           var key = keyStart++;
           if(!registry[name]) {
             registry[name] = {};
           }
-          if(list) {
-            registry[name][key] = list;
+          if(builderFn) {
+            registry[name][key] = builderFn;
           }
-          each(toArray(subscribers), function(fn) {
-            fn && fn();
-          });
+          notify();
           return {
             deregister: function() {
               delete registry[name][key];
-            }
-          };
-        },
-        // consumer API
-        get = function(name, filters) {
-          var names = split(name, ' '),
-              registrations = map(names, function(n) {
-                return registry[n];
-              }),
-              registrationLists = reduce(registrations, function(memo, next, i, list) {
-                var lists = map(ownKeys(next), function(key) {
-                  return next[key];
-                });
-                return memo.concat(flatten(lists));
-              }, []),
-              flattened = flatten(registrationLists),
-              filtered = filter(flattened, function(item, index, list) {
-                if(contains(filters, item.type)) {
-                  return item;
-                }
-              });
-          return filtered;
-        },
-        subscribe = function(fn) {
-          var key = keyStart++;
-          subscribers[key] = fn;
-          return {
-            unsubscribe: function() {
-              delete subscribers[key];
+              notify();
             }
           };
         };
 
-    // In the provider context (Angular's initialization phase)
-    // only the register method is useful.
+    // provider context export
     this.register = register;
 
-    // all methods available in service context (Angular's run phase)
+    // service context export
     this.$get = [
         '$log',
-        function($log) {
+        '$q',
+        function($log, $q) {
           return {
             register: register,
-            get: get,
-            subscribe: subscribe
+            get: function(names, filters, args, limit) {
+                return $q.all(
+                          flatten(
+                            reduce(
+                              map(
+                                split(names, ' '),
+                                function(n) {
+                                  return registry[n];
+                                }),
+                              function(memo, next, i, list) {
+                                return memo.concat(
+                                  flatten(
+                                    map(
+                                        ownKeys(next),
+                                        function(key) {
+                                          return next[key](args);
+                                        })));
+                            }, [])))
+                          .then(function() {
+                            return reduce(
+                                    filter(
+                                      flatten(
+                                        slice(arguments)),
+                                        function(item, index, list) {
+                                          if(contains(filters, item.type)) {
+                                            return item;
+                                          }
+                                        }),
+                                    function(memo, next, i, list) {
+                                      if(memo.length >= limit) {
+                                        return memo;
+                                      }
+                                      memo.push(next);
+                                      return memo;
+                                    }, []);
+                                  });
+            },
+            subscribe: function(fn) {
+              var key = keyStart++;
+              subscribers[key] = fn;
+              return {
+                unsubscribe: function() {
+                  delete subscribers[key];
+                }
+              };
+            }
           };
         }];
   }
@@ -218,24 +233,35 @@ angular.module('extension-registry')
 angular.module('extension-registry')
   .directive('extensionOutput', function() {
     return {
-      restrict: 'AE',
+      restrict: 'EA',
       scope: {
-        name: '@name',
-        filters: '@filters',
-        context: '@context'
+        extensionName: '=',
+        extensionFilters: '=',
+        extensionArgs: '=',
+        extensionLimit: '='
       },
       transclude: true,
       templateUrl: '__extension-output.html',
       controller: [
         '$scope',
+        '$q',
         'extensionInput',
-        function($scope, extensionInput) {
-          this.initialize = function(name, filters, context) {
-            $scope.items = extensionInput.get(name, filters);
-            $scope.context = context;
-            var registry = extensionInput.subscribe(function() {
-              $scope.items = extensionInput.get(name, filters);
-            });
+        function($scope, $q, extensionInput) {
+          this.initialize = function(name, filters, args) {
+            var resolve = function() {
+              $q
+                .when(extensionInput.get(name, filters, $scope.extensionArgs, Number($scope.extensionLimit)))
+                .then(function(items) {
+                  angular.extend($scope, {
+                    items: items
+                  });
+                });
+              };
+
+            resolve();
+            // events for handling new registries
+            // and to clean up when done.
+            var registry = extensionInput.subscribe(resolve);
 
             $scope.$on('$destroy', function() {
               registry.unsubscribe();
@@ -246,8 +272,9 @@ angular.module('extension-registry')
       link: function($scope, $elem, $attrs, ctrl) {
         var name = $attrs.extensionName,
             filters = $attrs.extensionTypes && $attrs.extensionTypes.split(' ') || [],
-            context = $attrs.extensionContext || {};
-        ctrl.initialize(name, filters, context);
+            args = $attrs.extensionArgs || {};
+        // TODO: track down $attrs[attr] vs $scope[attr] usage.
+        ctrl.initialize(name, filters, args);
       }
     };
   });
