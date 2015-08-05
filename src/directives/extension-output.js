@@ -22,9 +22,9 @@ angular.module('extension-registry')
                 .then(function(items) {
                   angular.extend($scope, {
                     items: items
-                  })
+                  });
                 });
-              }
+              };
 
             resolve();
             // events for handling new registries
