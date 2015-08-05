@@ -46,28 +46,42 @@ angular.module('extension-registry')
         function($log, $q) {
           return {
             register: register,
-            get: function(name, filters, args) {
-              var names = split(name, ' '),
-                  registrations = map(names, function(n) {
-                    return registry[n];
-                  }),
-                  registrationLists = reduce(registrations, function(memo, next, i, list) {
-                    var lists = map(ownKeys(next), function(key) {
-                      return next[key](args);
-                    });
-                    return memo.concat(flatten(lists));
-                  }, []),
-                  flattened = flatten(registrationLists);
-              // resolves the promises for objects, then will do the filtering
-              return  $q.all(flattened)
-                        .then(function() {
-                          var args = flatten(slice(arguments));
-                          return filter(args, function(item, index, list) {
-                                  if(contains(filters, item.type)) {
-                                    return item;
-                                  }
-                                });
-                        });
+            get: function(names, filters, args, limit) {
+                return $q.all(
+                          flatten(
+                            reduce(
+                              map(
+                                split(names, ' '),
+                                function(n) {
+                                  return registry[n];
+                                }),
+                              function(memo, next, i, list) {
+                                return memo.concat(
+                                  flatten(
+                                    map(
+                                        ownKeys(next),
+                                        function(key) {
+                                          return next[key](args);
+                                        })));
+                            }, [])))
+                          .then(function() {
+                            return reduce(
+                                    filter(
+                                      flatten(
+                                        slice(arguments)),
+                                        function(item, index, list) {
+                                          if(contains(filters, item.type)) {
+                                            return item;
+                                          }
+                                        }),
+                                    function(memo, next, i, list) {
+                                      if(memo.length >= limit) {
+                                        return memo;
+                                      }
+                                      memo.push(next);
+                                      return memo;
+                                    }, []);
+                                  });
             },
             subscribe: function(fn) {
               var key = keyStart++;

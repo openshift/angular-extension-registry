@@ -5,7 +5,8 @@ angular.module('extension-registry')
       scope: {
         extensionName: '=',
         extensionFilters: '=',
-        extensionArgs: '='
+        extensionArgs: '=',
+        extensionLimit: '='
       },
       transclude: true,
       templateUrl: '__extension-output.html',
@@ -16,7 +17,7 @@ angular.module('extension-registry')
         function($scope, $q, extensionInput) {
           this.initialize = function(name, filters, args) {
             var resolve = function() {
-              $q.when(extensionInput.get(name, filters, $scope.extensionArgs))
+              $q.when(extensionInput.get(name, filters, $scope.extensionArgs, Number($scope.extensionLimit)))
               .then(function(items) {
                 angular.extend($scope, {
                   items: items

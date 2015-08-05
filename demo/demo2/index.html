@@ -14,7 +14,7 @@
      outline: 1px solid #DDD;
     }
     extension-renderer {
-      outline: 1px dashed #990000;
+      /*outline: 1px dashed #990000; */
       background-color: #EDBCBC;
     }
     .card {
@@ -26,6 +26,9 @@
     }
     .card-grey {
       background: #F7F7F7;
+    }
+    .friend {
+      font-size: 11px;
     }
   </style>
 </head>
@@ -47,38 +50,40 @@
 
       <div flex layout row grow="3" tablet="column" mobile="column">
 
-        <div flex layout column outline class="pad-md">
+        <div flex layout column scrollable outline class="pad-md">
 
           <div class="pad-md">center column</div>
 
           <div ng-controller="controller.things">
 
             <div layout column ng-repeat="item in items" class="card">
-
+              <div layout row>
+                <div class="pad-sm">
+                  <img ng-src="{{item.picture}}" />
+                </div>
+                <div flex layout column class="pad-sm">
+                  <div>name: {{item.name.first}} {{item.name.last}}</div>
+                  <div>company: {{item.company}}</div>
+                  <div>email: {{item.email}}</div>
+                  <div layout row tablet="column" mobile="column">
+                    <div ng-repeat="friend in item.friends" flex class="card card-grey friend">
+                      <div>name: {{friend.name}}</div>
+                      <div
+                        extension-output
+                        extension-name="thing"
+                        extension-types="text link"
+                        extension-args="friend"
+                        extension-limit="2"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div>
                 <div
                   extension-output
                   extension-name="thing"
                   extension-types="text link"
                   extension-args="item"></div>
-              </div>
-
-              <div layout row>
-                <div class="pad-sm">
-                  <img ng-src="{{item.picture}}" />
-                </div>
-                <div layout column class="pad-sm">
-                  <div>name: {{item.name.first}} {{item.name.last}}</div>
-                  <div>company: {{item.company}}</div>
-                  <div>email: {{item.email}}</div>
-                  <div layout row>
-                    <div ng-repeat="friend in item.friends" class="card card-grey">
-                      <div>name: {{friend.name}}</div>
-                      <!-- will also put extension-output here,
-                           scoped to the friend... -->
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
 

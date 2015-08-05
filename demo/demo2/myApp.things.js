@@ -14,13 +14,24 @@ angular.module('myapp')
   ])
   .controller('controller.things', [
     '$scope',
+    '$timeout',
     'things',
-    function($scope, things) {
-      things.get()
-            .success(function(data) {
-              angular.extend($scope, {
-                items: data
-              });
+    function($scope, $timeout, things) {
+      things
+        .get()
+        .success(function(data) {
+          angular.extend($scope, {
+            items: data.slice(0,2)
+          });
+          // force an arbitrary data update to test two way binding
+          $timeout(function() {
+            angular.extend($scope, {
+              items: data.slice(2)
             });
+          }, 2000)
+        });
+
+
+
     }
   ])
