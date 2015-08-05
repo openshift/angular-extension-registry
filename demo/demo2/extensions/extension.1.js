@@ -8,16 +8,20 @@ angular.module('myapp')
     function($q, extensionInput) {
 
         extensionInput.register('thing', function(args) {
-            // builds:
-            //   Conroy Cage's
-            var name = [
-              args.name.first,
-              ' ',
-              args.name.last,
-              '\'s'
-            ].join('');
+            var name;
+            if(args.name && args.name.first) {
+              // builds:
+              //   Conroy Cage's
+              name = [
+                args.name.first,
+                ' ',
+                args.name.last,
+                '\'s '
+              ].join('');
+            } else {
+              name = args.name + '\'s ';
+            }
 
-            // Contrived,
             // this probably needs to be able to call
             // a few APIs... who knows.
             // but, very important that args are used to generate
