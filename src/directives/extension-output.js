@@ -27,10 +27,8 @@ angular.module('extension-registry')
               };
 
             resolve();
-            // events for handling new registries
-            // and to clean up when done.
-            var registry = extensionInput.subscribe(resolve);
 
+            var registry = extensionInput.subscribe(resolve);
             $scope.$on('$destroy', function() {
               registry.unsubscribe();
             });
@@ -41,7 +39,7 @@ angular.module('extension-registry')
         var name = $attrs.extensionName,
             filters = $attrs.extensionTypes && $attrs.extensionTypes.split(' ') || [],
             args = $attrs.extensionArgs || {};
-        // TODO: track down $attrs[attr] vs $scope[attr] usage.
+
         ctrl.initialize(name, filters, args);
       }
     };
