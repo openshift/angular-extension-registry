@@ -1,15 +1,8 @@
 # angular-extension-registry
-An angular module allowing arbitrary data to be injected &amp; rendered in UI.  There is a
-data input component, and a data output component.  The `extensionInputProvider` handles input,
-allowing you to name registries and assign configuration data to these registries.  The `extensionOutput`
-directive (`<extension-output>`) handles the output by generating HTML representation.
-It is an HTML element (or attribute) you can place in your view files to
-compose a rendering of data.  It has two additional attributes for configuring the output.
-The `extension-name="name name2"` will reference one or more named registries, and
-the `extension-types="text link select html"` attribute lets you filter the types of outputs
-rendered for that particular instance.  See the usage section below for an simple example.
 
-## Basic Usage
+An angular module that provides a plugin registry system for arbitrarily injecting additional UI components into views.  A primary use case would be allowing developers to add components to an application without compiling the extension point files into the actual application.
+
+## Usage
 
 Include the minified script in your html file.  If you want to use the pre-compiled default
 templates, include the additional template script.
@@ -26,204 +19,189 @@ Then require the module in your app.  This is done in the typical Angular fashio
 // require 'extension-registry'
 angular.module('myapp', [
   'extension-registry'
-])
-```
-
-Provide data during the initialization phase via the provider:
-
-```javascript
-// then configure via the extensionInputProvider
-.config([
-  'extensionInputProvider',
-  function(extensionInputProvider) {
-    // create some data to register
-    var fooExtensions = [
-      {
-        type: 'text',
-        output: 'This is text only.',
-        className: 'typography'
-      },
-      {
-        type: 'link',
-        link: 'http://google.com',
-        target: '_blank',
-        displayName: 'Google',
-        className: 'external my-link'
-      },
-    ];
-    // then register it to a named endpoint
-    extensionInputProvider.register('foo', fooExtensions);
-  }
 ]);
 ```
 
-Or during the run phase via the service:
+### View Output
 
-```javascript
-angular.module('myapp')
-  .factory('fooExtensionFactory', function() {
-    return [
-      {
-        type: 'text',
-        output: 'This is text only.',
-        className: 'extension extension-pod'
-      },
-      {
-        type: 'link',
-        link: 'http://openshift.com',
-        className: 'external my-link',
-        displayName: 'Red Hat OpenShift'
-      }
-    ];
-  })
-  .run([
-    '$timeout',
-    'fooExtensionFactory',
-    'extensionInput',
-    function($timeout, fooExtensionFactory, extensionInput) {
+Output points must be defined in the views like this:
 
-      extensionInput.register('main', fooExtensionFactory);
-
-      // simulate time passing, as if API call, then add additional data
-      // directives will be notified of new data & will update if necessary
-      $timeout(function() {
-        extensionInput.register('main', fooExtensionFactory);
-      }, 1000);
-
-    }
-  ]);
-
-
-```
-
-An example with a service:
-
-```javascript
-.run([
-    '$q',
-    'dataProvider1',
-    'dataProvider2',
-    function($q, dataProvider1, dataProvider2, extensionInput) {
-
-      $q.when([
-        dataProvider1.get(),
-        dataProvider2.get()
-      ])
-      .then(function(data1, data2) {
-        extensionInput.register('endpoint1', [
-          // make objects with the data...
-        ]);
-      });
-
-    }
-  ]);
-
-```
-
-
-The basic output directive:
 
 ```html
 <!--
-  then drop an instance of the output directive into your html file,
-  key it to the 'foo' name (multipe names can be referenced),
-  and filter it to the extension type you will allow in this
-  particular instance (built in: text, link, html, select box)
+  - extension-output is the main directive
+  - configure it with extension-name="space delimited endpoint names"
+  - configure it with extension-types to filter out types of objects it will
+    render.  objects that do not match this filter will not be rendered.
+  - configure runtime contextual data via extension-args.  This object will be
+    passed to each registered callback function to generate unique output
+  - in certain cases the # of items may need to be limited.  use extension-limit
 -->
 <div
   extension-output
-  extension-name="foo"
-  extension-types="text link select html"></div>
-
+  extension-name="register1 register2"
+  extension-types="text link select html"
+  extension-args="a_relevant_object_for_context"
+  extension-limit="2"></div>
 ```
 
-## Additional Usage Options
+### Data Input
 
+Then the service can be used to register data objects for render.  Two-way data
+binding will apply, output will re-render whenever the UI changes:
 
-### Registering Multiple Named Inputs
+### Built in formats
 
-Register an extension name like this:
+Currently, there are 4 types of objects supported.  Some quick vanilla examples:
 
 ```javascript
-angular.module('myapp', [
-  'extension-registry'
-])
-.config([
-  'extensionInputProvider',
-  function(extensionInputProvider) {
-    extensionInputProvider.register('sidebar-left');
+
+// type: text
+{
+  type: 'text',
+  output: 'This is text one.',
+  className: 'test'
+},
+// type: html
+// NOTE: html requires ng-sanitize module as the html must be rendered
+{
+  type: 'html',
+  output: '<p><strong>Stuff</strong> and things.  Rendered HTML</p>',
+  className: 'stuff-and-things test'
+},
+// type: link
+{
+  type: 'link',
+  href: 'http://google.com',
+  displayName: 'google link',
+  target: '_blank'
+},
+// link: with an onclick function
+{
+  type: 'link',
+  displayName: 'google alert',
+  onClick: function() {
+    alert('google!');
   }
-]);
+},
+// type: select box
+{
+  type: 'select',
+  displayName: 'bar select 1',
+  defaultVal: 'something',
+  className: 'i am a select box test',
+  options: [
+    {
+      label: 'bar 1 - 1',
+      value: 'bar',
+      className: 'shizzle first option test'
+    },{
+      label: 'bar 1 - 2',
+      value: 'thing'
+    },{
+      label: 'bar 1 - 3',
+      value: 'other'
+    },
+  ]
+}
+
 ```
 
-Multiple can be registered like this:
+
+### Data registration
+
+Registering the data objects to a specific endpoint happens via a registration
+function.  The function will receive contextual arguments and can return a
+promise, data, etc.
 
 ```javascript
+
+// args is an object set via the directive in the view.
+// likely it is some object on a controller scope that gives
+// meaning to the endpoint.
+extensionInputProvider.register('endpoint1', function(args) {
+  return $q.when([
+    // my objects
+  ]);
+});
+
+
+```
+
+A typical registration example:
+
+```javascript
+
+angular.module('myapp')
+  .run([
+    '$q',
+    '$timeout',
+    'extensionInput',
+    function($q, $timeout, extensionInput) {
+
+      // args is provided via the directive attrib extension-args="some_object"
+      // and can be used to customize the data objects that will be rendered
+      extensionInput.register('register1', function(args) {
+        // simulate async (service calls, etc)
+        return $q.when([
+          // add a single link, assuming the args to the directive will provide
+          // a name & href for the object
+          {
+            type: 'link',
+            href: args.href,
+            displayName: args.name + ' link',
+            target: '_blank'
+          }
+        ]);
+      });
+
+      // multiple items registered
+      extensionInput.register('register1', function(args) {
+        return $q.when([
+          {
+            type: 'link',
+            href: args.href,
+            displayName: args.name + ' link',
+            target: '_blank'
+          },
+          {
+            type: 'link',
+            displayName: args.name + 'alert',
+            onClick: function() {
+              alert('clicked!');
+            }
+          }
+        ]);
+      });
+    }
+  ]);
+
+```
+
+For organizational purposes, register endpoints ahead of time:
+
+```javascript
+
 extensionInputProvider.register('sidebar-left');
 extensionInputProvider.register('main');
 extensionInputProvider.register('footer');
 extensionInputProvider.register('foo');
 extensionInputProvider.register('bar');
 extensionInputProvider.register('shizzle');
+
 ```
 
-### Providing Data to a Named Registry
-
-Each time you call `.register()` you can provide a data list (array)
-like this:
+It is fine to register multiple callbacks to an endpoint:
 
 ```javascript
-var dataArr = [ /* data, see formats below */ ];
-extensionInputProvider.register('name', dataArr);
+
+extensionInputProvider.register('endpoint1', function() {  return [ /* stuff */ ] });
+extensionInputProvider.register('endpoint1', function() {  return [ /* stuff2 */ ] });
+extensionInputProvider.register('endpoint1', function() {  return [ /* stuff3 */ ] });
+extensionInputProvider.register('endpoint1', function() {  return [ /* stuff4 */ ] });
 ```
 
-You can provide the data on the first call, or break it up into numerous calls,
-depending on organization preference.  The point is that string keys are matched.
-
-```javascript
-extensionInputProvider.register('main');
-
-var data = [{},{},{}],
-    data2 = [ /* more stuff to register */ ];
-
-// these can be independently deregistered, see next section
-extensionInputProvider.register('main', data);
-extensionInputProvider.register('main', data2);
-
-```
-
-### Keeping the Config Block Clean and Orderly
-
-Angular allows multiple `.config` blocks to be defined for a module.  This can be done in
-one file or in many.  It may be beneficial to break each named registry into a separate
-block or file if there is a lot of extension data to register:
-
-```javascript
-angular.module('myapp', [
-  'extension-registry'
-])
-.config([
-  'extensionInputProvider',
-  function(extensionInputProvider) {
-    // some configuration here...
-  }
-])
-.config([
-  'extensionInputProvider',
-  function(extensionInputProvider) {
-    // some configuration here...
-  }
-])
-.config([
-  'extensionInputProvider',
-  function(extensionInputProvider) {
-    // some configuration here...
-  }
-]);
-```
-
-
-### Deregistering Data for a Registry
+### Deregistering data
 
 Each time you register data to a registry, the `.register()` function will return an object that
 has a `.deregister()` function bound to that particular data set, allowing you to unregister that
@@ -231,84 +209,14 @@ block of data.  Calling `.deregister()` does not clear an entire registry, ONLY 
 registered in that data set.
 
 ```javascript
-// a single registration, immediately deregistered
-var someDataRegister = extensionInputProvider.register('sidebar-left', someData);
-someDataRegister.deregister();
+var reg = extensionInputProvider.register('endpoint1', function() {  return [ /* stuff */ ] });
 
-// or, if you collected the registries in an array:
-var registries = [
-  extensionInputProvider.register('foo', fooData),
-  extensionInputProvider.register('bar', barData),
-  extensionInputProvider.register('baz', bazData)
-];
-// this second registry to foo is not bound to the first
-var fooData2Registry = extensionInputProvider.register('foo', fooData2);
-
-// each item in the array will now be deregistered,
-// BUT the 'foo' registry will still have the second instance of data
-registries.forEach(function(registry) {
-  registry.deregister();
-});
-
-// This will derigister the second group of data added to 'foo'
-fooData2Registry.deregister();
-```
-
-### Using Other Services
-
-One example of using other services in your extension is this:
-
-```javascript
-.run(function($timeout, fooService, extensionInput) {
-
-  // registering a link that makes use of an external service
-  extensionInput.register('sidebar-left', [
-    {
-      type: 'link',
-      link: 'http://example.com',
-      displayName: 'some link that does fancy stuff',
-      fn: function() {
-        return fooService
-                    .doAsyncThing()
-                    .then(function() {
-                      // do other stuff....
-                    });
-      }
-    }
-  ]);
-});
+// nah, actually we don't want this anymore.
+reg.deregister();
 
 ```
 
-
-### Directive for Output
-
-The output directive can be configured in numerous ways.  The simplest is to
-simply a single name & type:
-
-```html
-<!--
-  only data from foo, all registries to foo will be
--->
-<div
-  extension-output
-  extension-name="foo"
-  extension-types="link"></div>
-```
-
-But the directive can pull data from multiple named endpoints and filter via any
-of the provided types:
-
-```html
-<div
-  extension-output
-  extension-name="foo bar"
-  extension-types="link text html select"></div>
-
-```
-
-
-### Template Usage / Overrides
+### Template usage / overrides
 
 The `/src/views/` directory houses the source html files used to generate templates.  These
 are compiled into `/dist/compiled-templates.js`.  The script can be included to use the default
@@ -318,10 +226,12 @@ path name.  Example: `__extension-link.html`.
 These templates will need to be registered via Angular's templateCache.  The best way to do this
 is with a build tool, such as gulp's `gulp-angular-templatecache` plugin.
 
+### View the demos
 
-### See the Demo
+Clone the project, `npm install` and `bower install`.  Run a simple server with
+`python -m SimpleHTTPServer` (or whatever server you prefer) and navigate to
+`http://localhost:8000/demo/` (check the port, depends on the server you use).
+There are a few trivial examples of usage in this directory.
 
-Clone the project and run `npm install` and `bower install`.  Spin up a simple server in the root
-directory however you see fit, such as `python -m SimpleHTTPServer` and navigate to the `/demo`
-directory.  Experiment with the simple app registry setup.
+
 

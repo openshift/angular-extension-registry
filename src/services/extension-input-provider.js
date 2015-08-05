@@ -18,7 +18,13 @@ angular.module('extension-registry')
         toArray = utils.toArray;
 
     // methods available in provider && service context
-    var register = function(name, builderFn) {
+    var
+        notify = function() {
+          each(toArray(subscribers), function(fn) {
+            fn && fn();
+          });
+        },
+        register = function(name, builderFn) {
           var key = keyStart++;
           if(!registry[name]) {
             registry[name] = {};
@@ -26,12 +32,11 @@ angular.module('extension-registry')
           if(builderFn) {
             registry[name][key] = builderFn;
           }
-          each(toArray(subscribers), function(fn) {
-            fn && fn();
-          });
+          notify();
           return {
             deregister: function() {
               delete registry[name][key];
+              notify();
             }
           };
         };

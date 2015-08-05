@@ -28,7 +28,10 @@ angular.module('myapp')
             angular.extend($scope, {
               items: data.slice(2)
             });
-          }, 2000)
+          }, 2000);
+          // angular.extend($scope, {
+          //   items: data
+          // });
         });
 
 

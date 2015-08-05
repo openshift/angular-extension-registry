@@ -17,13 +17,14 @@ angular.module('extension-registry')
         function($scope, $q, extensionInput) {
           this.initialize = function(name, filters, args) {
             var resolve = function() {
-              $q.when(extensionInput.get(name, filters, $scope.extensionArgs, Number($scope.extensionLimit)))
-              .then(function(items) {
-                angular.extend($scope, {
-                  items: items
-                })
-              });
-            }
+              $q
+                .when(extensionInput.get(name, filters, $scope.extensionArgs, Number($scope.extensionLimit)))
+                .then(function(items) {
+                  angular.extend($scope, {
+                    items: items
+                  })
+                });
+              }
 
             resolve();
             // events for handling new registries

@@ -4,10 +4,11 @@ angular.module('myapp')
   })
   .run([
     '$q',
+    '$timeout',
     'extensionInput',
-    function($q, extensionInput) {
-
-        extensionInput.register('thing', function(args) {
+    function($q, $timeout, extensionInput) {
+        var registries = [
+          extensionInput.register('thing', function(args) {
             var name;
             if(args.name && args.name.first) {
               // builds:
@@ -22,13 +23,7 @@ angular.module('myapp')
               name = args.name + '\'s ';
             }
 
-            // this probably needs to be able to call
-            // a few APIs... who knows.
-            // but, very important that args are used to generate
-            // what is finally returned
-            //
-            // TODO:
-            // also test $q.all([promise, promise, promise])
+            // simulate async
             return $q.when([
               {
                 type: 'link',
@@ -50,27 +45,33 @@ angular.module('myapp')
                 target: '_blank'
               },
             ]);
-        });
-
+        }),
+        // ensure a second block of items still works.
         extensionInput.register('thing', function(args) {
-          console.log('args', args);
-
-            return $q.when([
-              {
-                type: 'link',
-                href: 'http://redhat.com',
-                displayName: name + 'redhat link',
-                target: '_blank'
-              },
-              {
-                type: 'link',
-                displayName: name + 'redhat alert',
-                onClick: function() {
-                  alert('redhat!');
-                }
+          return $q.when([
+            {
+              type: 'link',
+              href: 'http://redhat.com',
+              displayName: name + 'redhat link',
+              target: '_blank'
+            },
+            {
+              type: 'link',
+              displayName: name + 'redhat alert',
+              onClick: function() {
+                alert('redhat!');
               }
-            ]);
-        });
+            }
+          ]);
+        })
+      ];
+
+      // delay and then deregister one to ensure UI updates
+      $timeout(function() {
+        registries[0].deregister();
+      }, 4000);
+
+
 
     }
   ]);
