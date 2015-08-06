@@ -25,6 +25,9 @@ angular.module('extension-registry-utils', [
       isNumber = function(obj) {
         return toString(obj) === '[object Number]';
       },
+      isFunction = function(obj) {
+        return toString(obj) === '[object Function]';
+      },
       // arrays
       slice = unbind(Array.prototype.slice),
       each = function(arr, fn) {
@@ -116,7 +119,7 @@ angular.module('extension-registry-utils', [
           flatten: flatten,
           ownKeys: ownKeys,
           toArray: toArray,
-          isArray: isArray,
+          isFunction: isFunction,
           isObject: isObject,
           isNumber: isNumber
         };
@@ -139,7 +142,8 @@ angular.module('extension-registry')
         flatten = utils.flatten,
         reduce = utils.reduce,
         ownKeys = utils.ownKeys,
-        toArray = utils.toArray;
+        toArray = utils.toArray,
+        isFunction = utils.isFunction;
 
     // methods available in provider && service context
     var
@@ -153,20 +157,28 @@ angular.module('extension-registry')
           if(!registry[name]) {
             registry[name] = {};
           }
-          if(builderFn) {
+          if(builderFn && isFunction(builderFn)) {
             registry[name][key] = builderFn;
+            notify();
           }
-          notify();
           return {
             deregister: function() {
               delete registry[name][key];
               notify();
             }
           };
-        };
+        },
+        dump = function() {
+          return registry;
+        },
+        clean = function() {
+          registry = {};
+        }
 
     // provider context export
     this.register = register;
+    this.dump = dump;
+    this.clean = clean;
 
     // service context export
     this.$get = [
@@ -188,18 +200,18 @@ angular.module('extension-registry')
                                 return memo.concat(
                                   flatten(
                                     map(
-                                        ownKeys(next),
-                                        function(key) {
-                                          return next[key](args);
-                                        })));
-                            }, [])))
+                                      ownKeys(next),
+                                      function(key) {
+                                        return next[key] && next[key](args);
+                                      })));
+                              }, [])))
                           .then(function() {
                             return reduce(
                                     filter(
                                       flatten(
                                         slice(arguments)),
                                         function(item, index, list) {
-                                          if(contains(filters, item.type)) {
+                                          if(contains(filters, item && item.type)) {
                                             return item;
                                           }
                                         }),
@@ -220,7 +232,9 @@ angular.module('extension-registry')
                   delete subscribers[key];
                 }
               };
-            }
+            },
+            dump: dump,
+            clean: clean
           };
         }];
   }
