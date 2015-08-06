@@ -7,20 +7,23 @@ angular.module('myapp')
     '$timeout',
     'extensionInput',
     function($q, $timeout, extensionInput) {
+
         var registries = [
           extensionInput.register('thing', function(args) {
             var name;
-            if(args.name && args.name.first) {
-              // builds:
-              //   Conroy Cage's
-              name = [
-                args.name.first,
-                ' ',
-                args.name.last,
-                '\'s '
-              ].join('');
-            } else {
-              name = args.name + '\'s ';
+            if(args) {
+              if(args.name && args.name.first) {
+                // builds:
+                //   Conroy Cage's
+                name = [
+                  args.name.first,
+                  ' ',
+                  args.name.last,
+                  '\'s '
+                ].join('');
+              } else {
+                name = args.name + '\'s ';
+              }
             }
 
             // simulate async
@@ -28,12 +31,12 @@ angular.module('myapp')
               {
                 type: 'link',
                 href: 'http://google.com',
-                displayName: name + 'google link',
+                linkText: name + 'google link',
                 target: '_blank'
               },
               {
                 type: 'link',
-                displayName: name + 'google alert',
+                linkText: name + 'google alert',
                 onClick: function() {
                   alert('google!');
                 }
@@ -41,7 +44,7 @@ angular.module('myapp')
               {
                 type: 'not_a_thing_i_can_be',
                 href: 'http://example.com',
-                displayName: name + 'i should never appear',
+                linkText: name + 'i should never appear',
                 target: '_blank'
               },
             ]);
@@ -52,19 +55,74 @@ angular.module('myapp')
             {
               type: 'link',
               href: 'http://redhat.com',
-              displayName: name + 'redhat link',
+              linkText: name + 'redhat link',
               target: '_blank'
             },
             {
               type: 'link',
-              displayName: name + 'redhat alert',
+              linkText: name + 'redhat alert',
               onClick: function() {
                 alert('redhat!');
               }
             }
           ]);
+        }),
+        extensionInput.register('thing', function(args) {
+          // illustrates can return a list rather than a promise
+          return [
+            {
+              type: 'select',
+              nameText: 'select-name',
+              className: 'i am a select box test',
+              options: [
+                {
+                  label: 'bar 1 - 1',
+                  value: 'bar'
+                },{
+                  label: 'bar 1 - 2',
+                  value: 'thing'
+                },{
+                  label: 'bar 1 - 3',
+                  value: 'other'
+                }
+              ],
+              onChange: function(item) {
+                console.log('selected', item);
+              }
+            }
+          ];
+        }),
+        extensionInput.register('thing', function(args) {
+          return [
+            {
+              type: 'html',
+              html: [
+                      '<div>',
+                      args.name.first,
+                      ' is an employee.'
+                    ].join('')
+            }
+          ]
+        }),
+        extensionInput.register('thing', function(args) {
+          // note: illustrates you can return an object
+          // or an array
+          return {
+            type: 'text',
+            text: 'this is some text'
+          }
+        }),
+        extensionInput.register('thing', function(args) {
+          console.log('Returns nothing, but can do work', args);
+          return undefined;
         })
       ];
+
+
+      // test some side cases
+      // you must register a function, but should not error out...
+      extensionInput.register('thing');
+      extensionInput.register('thing', []);
 
       // delay and then deregister one to ensure UI updates
       $timeout(function() {

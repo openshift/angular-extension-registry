@@ -67,7 +67,7 @@
                   <div>email: {{item.email}}</div>
                   <div layout row tablet="column" mobile="column">
                     <div ng-repeat="friend in item.friends" flex class="card card-grey friend">
-                      <div>name: {{friend.name}}</div>
+                      <div>name: {{friend.name.first}}</div>
                       <div
                         extension-output
                         extension-name="thing"
@@ -82,7 +82,7 @@
                 <div
                   extension-output
                   extension-name="thing"
-                  extension-types="text link"
+                  extension-types="text link select html"
                   extension-args="item"></div>
               </div>
             </div>
