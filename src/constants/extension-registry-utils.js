@@ -20,6 +20,9 @@ angular.module('extension-registry-utils', [
       isNumber = function(obj) {
         return toString(obj) === '[object Number]';
       },
+      isFunction = function(obj) {
+        return toString(obj) === '[object Function]';
+      },
       // arrays
       slice = unbind(Array.prototype.slice),
       each = function(arr, fn) {
@@ -111,7 +114,7 @@ angular.module('extension-registry-utils', [
           flatten: flatten,
           ownKeys: ownKeys,
           toArray: toArray,
-          isArray: isArray,
+          isFunction: isFunction,
           isObject: isObject,
           isNumber: isNumber
         };

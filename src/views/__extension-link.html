@@ -1,15 +1,15 @@
 <a ng-if="!item.onClick"
-   ng-href="{{item.link}}"
+   ng-href="{{item.href}}"
    target="{{item.target}}"
-   title="{{item.displayName}}"
+   title="{{item.linkText}}"
    class="extension-link extension-{{index}} {{item.className}}">
-   {{item.displayName}}
+   {{item.linkText}}
  </a>
 
 <a ng-if="item.onClick"
    ng-href="#"
    ng-click="item.onClick(args)"
-   title="{{item.displayName}}"
+   title="{{item.linkText}}"
    class="extension-link extension-{{index}} {{item.className}}">
-   {{item.displayName}}
+   {{item.linkText}}
  </a>

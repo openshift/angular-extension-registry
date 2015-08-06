@@ -59,27 +59,29 @@ Currently, there are 4 types of objects supported.  Some quick vanilla examples:
 // type: text
 {
   type: 'text',
-  output: 'This is text one.',
-  className: 'test'
+  className: 'my-text',
+  text: 'This is some text.'
 },
 // type: html
 // NOTE: html requires ng-sanitize module as the html must be rendered
 {
   type: 'html',
-  output: '<p><strong>Stuff</strong> and things.  Rendered HTML</p>',
-  className: 'stuff-and-things test'
+  className: 'my-class',
+  html: '<p><strong>Stuff</strong> and things.</p>'
 },
 // type: link
 {
   type: 'link',
+  className: 'my-class',
+  linkText: 'google link',
   href: 'http://google.com',
-  displayName: 'google link',
   target: '_blank'
 },
 // link: with an onclick function
 {
   type: 'link',
-  displayName: 'google alert',
+  className: 'my-class'
+  linkText: 'google alert',
   onClick: function() {
     alert('google!');
   }
@@ -87,22 +89,23 @@ Currently, there are 4 types of objects supported.  Some quick vanilla examples:
 // type: select box
 {
   type: 'select',
-  displayName: 'bar select 1',
-  defaultVal: 'something',
   className: 'i am a select box test',
+  nameText: 'select-name',
   options: [
     {
       label: 'bar 1 - 1',
-      value: 'bar',
-      className: 'shizzle first option test'
+      value: 'bar'
     },{
       label: 'bar 1 - 2',
       value: 'thing'
     },{
       label: 'bar 1 - 3',
       value: 'other'
-    },
-  ]
+    }
+  ],
+  onChange: function(item) {
+    console.log('selected', item);
+  }
 }
 
 ```
@@ -119,7 +122,7 @@ promise, data, etc.
 // args is an object set via the directive in the view.
 // likely it is some object on a controller scope that gives
 // meaning to the endpoint.
-extensionInputProvider.register('endpoint1', function(args) {
+extensionInput.register('endpoint1', function(args) {
   return $q.when([
     // my objects
   ]);
@@ -182,12 +185,12 @@ For organizational purposes, register endpoints ahead of time:
 
 ```javascript
 
-extensionInputProvider.register('sidebar-left');
-extensionInputProvider.register('main');
-extensionInputProvider.register('footer');
-extensionInputProvider.register('foo');
-extensionInputProvider.register('bar');
-extensionInputProvider.register('shizzle');
+extensionInput.register('sidebar-left');
+extensionInput.register('main');
+extensionInput.register('footer');
+extensionInput.register('foo');
+extensionInput.register('bar');
+extensionInput.register('shizzle');
 
 ```
 
@@ -195,10 +198,10 @@ It is fine to register multiple callbacks to an endpoint:
 
 ```javascript
 
-extensionInputProvider.register('endpoint1', function() {  return [ /* stuff */ ] });
-extensionInputProvider.register('endpoint1', function() {  return [ /* stuff2 */ ] });
-extensionInputProvider.register('endpoint1', function() {  return [ /* stuff3 */ ] });
-extensionInputProvider.register('endpoint1', function() {  return [ /* stuff4 */ ] });
+extensionInput.register('endpoint1', function() {  return [ /* stuff */ ] });
+extensionInput.register('endpoint1', function() {  return [ /* stuff2 */ ] });
+extensionInput.register('endpoint1', function() {  return [ /* stuff3 */ ] });
+extensionInput.register('endpoint1', function() {  return [ /* stuff4 */ ] });
 ```
 
 ### Deregistering data
@@ -209,7 +212,7 @@ block of data.  Calling `.deregister()` does not clear an entire registry, ONLY 
 registered in that data set.
 
 ```javascript
-var reg = extensionInputProvider.register('endpoint1', function() {  return [ /* stuff */ ] });
+var reg = extensionInput.register('endpoint1', function() {  return [ /* stuff */ ] });
 
 // nah, actually we don't want this anymore.
 reg.deregister();
