@@ -1,7 +1,7 @@
 angular.module('myapp')
 .config([
-  'extensionInputProvider',
-  function(extensionInputProvider) {
+  'extensionRegistryProvider',
+  function(extensionRegistryProvider) {
 
     // 5 items for foo
     var extensionsFoo = [
@@ -60,6 +60,6 @@ angular.module('myapp')
       }
     ];
 
-    extensionInputProvider.register('foo', extensionsFoo);
+    extensionRegistryProvider.register('foo', extensionsFoo);
 
 }]);

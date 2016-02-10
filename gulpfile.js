@@ -34,8 +34,8 @@ gulp.task('build', ['clean','templates', 'jshint'], function () {
   return gulp.src([
       './src/extension-registry.js',
       './src/constants/extension-registry-utils.js',
-      './src/services/extension-input-provider.js',
-      './src/directives/extension-output.js',
+      './src/services/extension-registry-provider.js',
+      './src/directives/extension-point.js',
       './src/directives/extension-renderer.js'
     ])
     .pipe(concat('angular-extension-registry.js'))

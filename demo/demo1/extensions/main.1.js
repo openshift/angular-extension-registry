@@ -1,7 +1,7 @@
 angular.module('myapp')
 .config([
-  'extensionInputProvider',
-  function(extensionInputProvider) {
+  'extensionRegistryProvider',
+  function(extensionRegistryProvider) {
 
     var clickCount = 1;
 
@@ -55,5 +55,5 @@ angular.module('myapp')
       },
     ];
 
-    extensionInputProvider.register('main', extensionsMain);
+    extensionRegistryProvider.register('main', extensionsMain);
 }]);

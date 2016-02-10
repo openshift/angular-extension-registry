@@ -1,5 +1,5 @@
 angular.module('extension-registry')
-  .directive('extensionOutput', function() {
+  .directive('extensionPoint', function() {
     return {
       restrict: 'EA',
       scope: {
@@ -9,16 +9,16 @@ angular.module('extension-registry')
         extensionLimit: '='
       },
       transclude: true,
-      templateUrl: '__extension-output.html',
+      templateUrl: '__extension-point.html',
       controller: [
         '$scope',
         '$q',
-        'extensionInput',
-        function($scope, $q, extensionInput) {
+        'extensionRegistry',
+        function($scope, $q, extensionRegistry) {
           this.initialize = function(name, filters, args) {
             var resolve = function() {
               $q
-                .when(extensionInput.get(name, filters, $scope.extensionArgs, Number($scope.extensionLimit)))
+                .when(extensionRegistry.get(name, filters, $scope.extensionArgs, Number($scope.extensionLimit)))
                 .then(function(items) {
                   angular.extend($scope, {
                     items: items
@@ -28,7 +28,7 @@ angular.module('extension-registry')
 
             resolve();
 
-            var registry = extensionInput.subscribe(resolve);
+            var registry = extensionRegistry.subscribe(resolve);
             $scope.$on('$destroy', function() {
               registry.unsubscribe();
             });

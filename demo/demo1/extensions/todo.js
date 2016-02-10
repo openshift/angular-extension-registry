@@ -1,9 +1,9 @@
 // 'use strict';
 // angular.module('myapp')
 // TODO: implement fooService to do some async thing for an example here.
-// .run(function($timeout, fooService, extensionInput) {
+// .run(function($timeout, fooService, extensionRegistry) {
 //   // registering a link that makes use of an external service
-//   extensionInput.register('pod:template', [
+//   extensionRegistry.register('pod:template', [
 //     {
 //       type: 'link',
 //       link: 'http://example.com',

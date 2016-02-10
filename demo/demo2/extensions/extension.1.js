@@ -5,11 +5,11 @@ angular.module('myapp')
   .run([
     '$q',
     '$timeout',
-    'extensionInput',
-    function($q, $timeout, extensionInput) {
+    'extensionRegistry',
+    function($q, $timeout, extensionRegistry) {
 
         var registries = [
-          extensionInput.register('thing', function(args) {
+          extensionRegistry.register('thing', function(args) {
             var name;
             if(args) {
               if(args.name && args.name.first) {
@@ -50,7 +50,7 @@ angular.module('myapp')
             ]);
         }),
         // ensure a second block of items still works.
-        extensionInput.register('thing', function(args) {
+        extensionRegistry.register('thing', function(args) {
           return $q.when([
             {
               type: 'link',
@@ -67,7 +67,7 @@ angular.module('myapp')
             }
           ]);
         }),
-        extensionInput.register('thing', function(args) {
+        extensionRegistry.register('thing', function(args) {
           // illustrates can return a list rather than a promise
           return [
             {
@@ -92,7 +92,7 @@ angular.module('myapp')
             }
           ];
         }),
-        extensionInput.register('thing', function(args) {
+        extensionRegistry.register('thing', function(args) {
           return [
             {
               type: 'html',
@@ -104,7 +104,7 @@ angular.module('myapp')
             }
           ]
         }),
-        extensionInput.register('thing', function(args) {
+        extensionRegistry.register('thing', function(args) {
           // note: illustrates you can return an object
           // or an array
           return {
@@ -112,7 +112,7 @@ angular.module('myapp')
             text: 'this is some text'
           }
         }),
-        extensionInput.register('thing', function(args) {
+        extensionRegistry.register('thing', function(args) {
           console.log('Returns nothing, but can do work', args);
           return undefined;
         })
@@ -121,8 +121,8 @@ angular.module('myapp')
 
       // test some side cases
       // you must register a function, but should not error out...
-      extensionInput.register('thing');
-      extensionInput.register('thing', []);
+      extensionRegistry.register('thing');
+      extensionRegistry.register('thing', []);
 
       // delay and then deregister one to ensure UI updates
       $timeout(function() {

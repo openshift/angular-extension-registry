@@ -1,6 +1,6 @@
 angular.module('extension-registry')
 
-.provider('extensionInput', [
+.provider('extensionRegistry', [
   'extensionRegistryUtils',
   function(utils) {
     var registry = {},
@@ -46,7 +46,7 @@ angular.module('extension-registry')
         },
         clean = function() {
           registry = {};
-        }
+        };
 
     // provider context export
     this.register = register;

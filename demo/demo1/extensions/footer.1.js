@@ -1,7 +1,7 @@
 // angular.module('myapp')
 // .config([
-//   'extensionInputProvider',
-//   function(extensionInputProvider) {
+//   'extensionRegistryProvider',
+//   function(extensionRegistryProvider) {
 
 //     var extensionsFooter = [
 //       {
@@ -12,6 +12,6 @@
 //     ];
 
 
-//     extensionInputProvider.register('footer', extensionsFooter);
+//     extensionRegistryProvider.register('footer', extensionsFooter);
 
 // }]);
