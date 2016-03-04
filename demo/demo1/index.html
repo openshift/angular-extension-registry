@@ -14,11 +14,21 @@
      outline: 1px solid #DDD;
     }
     extension-renderer {
-      outline: 1px dashed #990000;
+      /*outline: 1px dashed #990000; */
       background-color: #EDBCBC;
     }
-    .test {
-      /* background-color: #990000; */
+    .card {
+      padding: 10px;
+      margin: 10px;
+      border: 1px solid #cecece;
+      background: #fff;
+      box-shadow: 0px 0px 3px 1px #cecece
+    }
+    .card-grey {
+      background: #F7F7F7;
+    }
+    .friend {
+      font-size: 11px;
     }
   </style>
 </head>
@@ -27,45 +37,57 @@
   <div fit scrollable layout column outline>
 
     <div layout axis="center center" outline class="bg-white shadow-bottom-sm pad-lg">
-      <strong>Angular Extension Registry</strong>
+      <strong>Angular Extension Registry: Demo 2</strong>
     </div><!-- /heading -->
 
     <div flex layout row mobile="column" outline>
 
       <div flex shrink="3" outline>
 
-        <p><strong>Extension:sidebar-left</strong></p>
-        <div
-          extension-point
-          extension-name="sidebar-left"
-          extension-types="text link"></div>
+       <div class="pad-md">left sidebar</div>
 
       </div><!-- /sidebar left -->
 
       <div flex layout row grow="3" tablet="column" mobile="column">
-        <div flex layout column outline class="pad-md">
 
-          <div ng-controller="fooController">
-          <p><strong>Extension:main</strong></p>
-          <p>(using args attrib)</p>
-          <div
-            extension-point
-            extension-name="main"
-            extension-types="text link sanitize select"
-            extension-args="{{items}}"></div>
+        <div flex layout column scrollable outline class="pad-md">
+
+          <div class="pad-md">center column</div>
+
+          <div ng-controller="controller.things">
+
+            <div layout column ng-repeat="item in items" class="card">
+              <div layout row>
+                <div class="pad-sm">
+                  <img ng-src="{{item.picture}}" />
+                </div>
+                <div flex layout column class="pad-sm">
+                  <div>name: {{item.name.first}} {{item.name.last}}</div>
+                  <div>company: {{item.company}}</div>
+                  <div>email: {{item.email}}</div>
+                  <div layout row tablet="column" mobile="column">
+                    <div ng-repeat="friend in item.friends" flex class="card card-grey friend">
+                      <div>name: {{friend.name.first}}</div>
+                      <div
+                        extension-point
+                        extension-name="thing"
+                        extension-types="text link"
+                        extension-args="friend"
+                        extension-limit="2"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div
+                  extension-point
+                  extension-name="thing"
+                  extension-types="text link select html"
+                  extension-args="item"></div>
+              </div>
+            </div>
+
           </div>
-
-        </div><!-- /main left -->
-
-        <div flex layout column class="pad-md">
-          <p><strong>2nd center</strong></p>
-
-          <p><strong>Extensions:foo, bar</strong></p>
-          <p>but only select boxes</p>
-          <div
-            extension-point
-            extension-name="foo bar"
-            extension-types="select"></div>
 
         </div><!-- /main right -->
 
@@ -73,12 +95,9 @@
 
 
       <div flex conceal="mobile tablet" outline>
-        <p><strong>Hidden for mobile &amp; tablet</strong></p>
-        <ul>
-          <li>foo</li>
-          <li>bar</li>
-          <li>baz</li>
-        </ul>
+
+       <div class="pad-md">right sidebar, mobile/tablet hidden</div>
+
       </div><!-- /sidebar right -->
 
     </div>
@@ -88,37 +107,36 @@
       axis="center center"
       outline
       class="bg-white shadow-sm pad-lg">
-      <div
-        extension-point
-        extension-name="footer"
-        extension-types="text sanitize"></div>
+
+      <div>footer</div>
+
     </div>
  </div><!-- /outer wrapper -->
+
+
+
 
 
 <!-- vendor -->
 <script src="../../bower_components/angular/angular.js"></script>
 <script src="../../bower_components/angular-sanitize/angular-sanitize.js"></script>
-<!-- angular-extension-manager components -->
+
+<!-- angular-extension-manager -->
+<!-- unminified -->
 <script src="../../src/extension-registry.js"></script>
 <script src="../../src/constants/extension-registry-utils.js"></script>
 <script src="../../src/services/extension-input-provider.js"></script>
 <script src="../../src/directives/extension-point.js"></script>
 <script src="../../src/directives/extension-renderer.js"></script>
+<script src="../../dist/compiled-templates.js"></script> -->
+<!-- minified -->
+<script src="../../dist/angular-extension-registry.js"></script>
 <script src="../../dist/compiled-templates.js"></script>
-<!-- minified
-<script src="../../dist/angular-extension-registry.min.js"></script>
-<script src="../../dist/compiled-templates.js"></script>
--->
-<!-- app usage -->
+
+<!-- demo scripts -->
 <script src="./myApp.js"></script>
-<script src="./extensions/main.1.js"></script>
-<script src="./extensions/main.2.js"></script>
-<script src="./extensions/sidebar.left.1.js"></script>
-<script src="./extensions/sidebar.right.1.js"></script>
-<script src="./extensions/footer.1.js"></script>
-<script src="./extensions/foo.1.js"></script>
-<script src="./extensions/bar.1.js"></script>
+<script src="./myApp.things.js"></script>
+<script src="./extensions/extension.1.js"></script>
 
 </body>
 </html>

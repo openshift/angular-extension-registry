@@ -1,121 +1,127 @@
-angular.module('extension-registry-utils', [
+(function() {
+  'use strict';
 
-])
-// ONLY constants are available to a provider,
-// thus, this collection of functions is a constant.
-.constant('extensionRegistryUtils', (function() {
+  angular
+    .module('extension-registry-utils', [
 
-  var // utils
-      unbind = Function.prototype.bind.bind(Function.prototype.call),
-      // strings
-      split = unbind(String.prototype.split),
-      // is of type
-      toString = unbind(Object.prototype.toString),
-      isArray = function(obj) {
-        return toString(obj) === '[object Array]';
-      },
-      isObject = function(obj) {
-        return toString(obj) === '[object Object]';
-      },
-      isNumber = function(obj) {
-        return toString(obj) === '[object Number]';
-      },
-      isFunction = function(obj) {
-        return toString(obj) === '[object Function]';
-      },
-      // arrays
-      slice = unbind(Array.prototype.slice),
-      each = function(arr, fn) {
-        for(var i = 0; i < arr.length; i++) {
-          fn(arr[i], i, arr);
-        }
-      },
-      map = function(arr, fn) {
-        var list = [];
-        for(var i = 0; i < arr.length; i++) {
-          list.push(fn(arr[i], i, arr));
-        }
-        return list;
-      },
-      filter = function(arr, fn) {
-        var list = [];
-        for(var i=0;i<arr.length;i++) {
-          if(fn(arr[i],i, arr)) {
-            list.push(arr[i]);
-          }
-        }
-        return list;
-      },
-      reduce = function(arr, fn, memo) {
-        for(i = 0; i < arr.length; i++) {
-          memo = fn(memo, arr[i], i, arr);
-        }
-        return memo;
-      },
-      contains = function() {
-        var list = arguments[0],
-            rest = slice(arguments, 1),
-            successes = [];
-        each(rest, function(toMatch) {
-          each(list, function(item) {
-            if(item === toMatch) {
-                successes.push(true);
-            }
-          });
-        });
-        if(successes.length === rest.length) {
-          return true;
-        }
-        return false;
-      },
-      flatten = function(arr) {
-        var flattened = [];
-        each(arr, function(item, i) {
-          if(isArray(item)) {
-            flattened = flattened.concat(flatten(item));
-          } else {
-            flattened = flattened.concat(item);
-          }
-        });
-        return flattened;
-      },
-      // objects
-      ownKeys = function(obj) {
-        var list = [];
-        for(var prop in obj) {
-          if(obj.hasOwnProperty(prop)) {
-            list.push(prop);
-          }
-        }
-        return list;
-      },
-      toArray = function(obj) {
-        var list = [];
-        for(var prop in obj) {
-          if(obj.hasOwnProperty(prop)) {
-            list.push(obj[prop]);
-          }
-        }
-        return list;
-      };
+    ])
+    // ONLY constants are available to a provider,
+    // thus, this collection of functions is a constant.
+    .constant('extensionRegistryUtils', (function() {
 
-  return {
-          // utils
-          unbind: unbind,
+      var // utils
+          unbind = Function.prototype.bind.bind(Function.prototype.call),
           // strings
-          split: split,
-          // arrays/lists
-          slice: slice,
-          contains: contains,
-          each: each,
-          map: map,
-          reduce: reduce,
-          filter: filter,
-          flatten: flatten,
-          ownKeys: ownKeys,
-          toArray: toArray,
-          isFunction: isFunction,
-          isObject: isObject,
-          isNumber: isNumber
-        };
-})());
+          split = unbind(String.prototype.split),
+          // is of type
+          toString = unbind(Object.prototype.toString),
+          isArray = function(obj) {
+            return toString(obj) === '[object Array]';
+          },
+          isObject = function(obj) {
+            return toString(obj) === '[object Object]';
+          },
+          isNumber = function(obj) {
+            return toString(obj) === '[object Number]';
+          },
+          isFunction = function(obj) {
+            return toString(obj) === '[object Function]';
+          },
+          // arrays
+          slice = unbind(Array.prototype.slice),
+          each = function(arr, fn) {
+            for(var i = 0; i < arr.length; i++) {
+              fn(arr[i], i, arr);
+            }
+          },
+          map = function(arr, fn) {
+            var list = [];
+            for(var i = 0; i < arr.length; i++) {
+              list.push(fn(arr[i], i, arr));
+            }
+            return list;
+          },
+          filter = function(arr, fn) {
+            var list = [];
+            for(var i=0;i<arr.length;i++) {
+              if(fn(arr[i],i, arr)) {
+                list.push(arr[i]);
+              }
+            }
+            return list;
+          },
+          reduce = function(arr, fn, memo) {
+            for(var i = 0; i < arr.length; i++) {
+              memo = fn(memo, arr[i], i, arr);
+            }
+            return memo;
+          },
+          contains = function() {
+            var list = arguments[0],
+                rest = slice(arguments, 1),
+                successes = [];
+            each(rest, function(toMatch) {
+              each(list, function(item) {
+                if(item === toMatch) {
+                    successes.push(true);
+                }
+              });
+            });
+            if(successes.length === rest.length) {
+              return true;
+            }
+            return false;
+          },
+          flatten = function(arr) {
+            var flattened = [];
+            each(arr, function(item) {
+              if(isArray(item)) {
+                flattened = flattened.concat(flatten(item));
+              } else {
+                flattened = flattened.concat(item);
+              }
+            });
+            return flattened;
+          },
+          // objects
+          ownKeys = function(obj) {
+            var list = [];
+            for(var prop in obj) {
+              if(obj.hasOwnProperty(prop)) {
+                list.push(prop);
+              }
+            }
+            return list;
+          },
+          toArray = function(obj) {
+            var list = [];
+            for(var prop in obj) {
+              if(obj.hasOwnProperty(prop)) {
+                list.push(obj[prop]);
+              }
+            }
+            return list;
+          };
+
+      return {
+              // utils
+              unbind: unbind,
+              // strings
+              split: split,
+              // arrays/lists
+              slice: slice,
+              contains: contains,
+              each: each,
+              map: map,
+              reduce: reduce,
+              filter: filter,
+              flatten: flatten,
+              ownKeys: ownKeys,
+              toArray: toArray,
+              isFunction: isFunction,
+              isObject: isObject,
+              isNumber: isNumber
+            };
+    })());
+
+})();
