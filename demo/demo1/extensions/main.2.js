@@ -22,13 +22,13 @@ angular.module('myapp')
   .run([
     '$timeout',
     'fooExtensionFactory',
-    'extensionInput',
-    function($timeout, fooExtensionFactory, extensionInput) {
+    'extensionRegistry',
+    function($timeout, fooExtensionFactory, extensionRegistry) {
 
       // simulate time passing, as if API call, then add additional data
       // directives will be notified of new data & will update if necessary
       $timeout(function() {
-        extensionInput.register('service1', fooExtensionFactory);
+        extensionRegistry.register('service1', fooExtensionFactory);
       }, 1000);
 
     }
@@ -37,14 +37,14 @@ angular.module('myapp')
   // .run([
   //   'dataProvider1',
   //   'dataProvider2',
-  //   function($timeout, dataProvider1, dataProvider2, extensionInput) {
+  //   function($timeout, dataProvider1, dataProvider2, extensionRegistry) {
 
   //     $q.when([
   //       dataProvider1.get(),
   //       dataProvider2.get()
   //     ])
   //     .then(function(data1, data2) {
-  //       extensionInput.register('endpoint1', [
+  //       extensionRegistry.register('endpoint1', [
   //         // make objects with the data...
   //       ]);
   //     });

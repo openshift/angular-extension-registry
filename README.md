@@ -29,7 +29,7 @@ Output points must be defined in the views like this:
 
 ```html
 <!--
-  - extension-output is the main directive
+  - extension-point is the main directive
   - configure it with extension-name="space delimited endpoint names"
   - configure it with extension-types to filter out types of objects it will
     render.  objects that do not match this filter will not be rendered.
@@ -38,7 +38,7 @@ Output points must be defined in the views like this:
   - in certain cases the # of items may need to be limited.  use extension-limit
 -->
 <div
-  extension-output
+  extension-point
   extension-name="register1 register2"
   extension-types="text link select html"
   extension-args="a_relevant_object_for_context"
@@ -122,7 +122,7 @@ promise, data, etc.
 // args is an object set via the directive in the view.
 // likely it is some object on a controller scope that gives
 // meaning to the endpoint.
-extensionInput.register('endpoint1', function(args) {
+extensionRegistry.register('endpoint1', function(args) {
   return $q.when([
     // my objects
   ]);
@@ -139,12 +139,12 @@ angular.module('myapp')
   .run([
     '$q',
     '$timeout',
-    'extensionInput',
-    function($q, $timeout, extensionInput) {
+    'extensionRegistry',
+    function($q, $timeout, extensionRegistry) {
 
       // args is provided via the directive attrib extension-args="some_object"
       // and can be used to customize the data objects that will be rendered
-      extensionInput.register('register1', function(args) {
+      extensionRegistry.register('register1', function(args) {
         // simulate async (service calls, etc)
         return $q.when([
           // add a single link, assuming the args to the directive will provide
@@ -159,7 +159,7 @@ angular.module('myapp')
       });
 
       // multiple items registered
-      extensionInput.register('register1', function(args) {
+      extensionRegistry.register('register1', function(args) {
         return $q.when([
           {
             type: 'link',
@@ -185,12 +185,12 @@ For organizational purposes, register endpoints ahead of time:
 
 ```javascript
 
-extensionInput.register('sidebar-left');
-extensionInput.register('main');
-extensionInput.register('footer');
-extensionInput.register('foo');
-extensionInput.register('bar');
-extensionInput.register('shizzle');
+extensionRegistry.register('sidebar-left');
+extensionRegistry.register('main');
+extensionRegistry.register('footer');
+extensionRegistry.register('foo');
+extensionRegistry.register('bar');
+extensionRegistry.register('shizzle');
 
 ```
 
@@ -198,10 +198,10 @@ It is fine to register multiple callbacks to an endpoint:
 
 ```javascript
 
-extensionInput.register('endpoint1', function() {  return [ /* stuff */ ] });
-extensionInput.register('endpoint1', function() {  return [ /* stuff2 */ ] });
-extensionInput.register('endpoint1', function() {  return [ /* stuff3 */ ] });
-extensionInput.register('endpoint1', function() {  return [ /* stuff4 */ ] });
+extensionRegistry.register('endpoint1', function() {  return [ /* stuff */ ] });
+extensionRegistry.register('endpoint1', function() {  return [ /* stuff2 */ ] });
+extensionRegistry.register('endpoint1', function() {  return [ /* stuff3 */ ] });
+extensionRegistry.register('endpoint1', function() {  return [ /* stuff4 */ ] });
 ```
 
 ### Deregistering data
@@ -212,7 +212,7 @@ block of data.  Calling `.deregister()` does not clear an entire registry, ONLY 
 registered in that data set.
 
 ```javascript
-var reg = extensionInput.register('endpoint1', function() {  return [ /* stuff */ ] });
+var reg = extensionRegistry.register('endpoint1', function() {  return [ /* stuff */ ] });
 
 // nah, actually we don't want this anymore.
 reg.deregister();

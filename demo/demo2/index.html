@@ -69,7 +69,7 @@
                     <div ng-repeat="friend in item.friends" flex class="card card-grey friend">
                       <div>name: {{friend.name.first}}</div>
                       <div
-                        extension-output
+                        extension-point
                         extension-name="thing"
                         extension-types="text link"
                         extension-args="friend"
@@ -80,7 +80,7 @@
               </div>
               <div>
                 <div
-                  extension-output
+                  extension-point
                   extension-name="thing"
                   extension-types="text link select html"
                   extension-args="item"></div>
@@ -124,7 +124,7 @@
 <script src="../../src/extension-registry.js"></script>
 <script src="../../src/constants/extension-registry-utils.js"></script>
 <script src="../../src/services/extension-input-provider.js"></script>
-<script src="../../src/directives/extension-output.js"></script>
+<script src="../../src/directives/extension-point.js"></script>
 <script src="../../src/directives/extension-renderer.js"></script>
 <script src="../../dist/compiled-templates.js"></script> -->
 <!-- minified -->

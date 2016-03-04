@@ -36,7 +36,7 @@
 
         <p><strong>Extension:sidebar-left</strong></p>
         <div
-          extension-output
+          extension-point
           extension-name="sidebar-left"
           extension-types="text link"></div>
 
@@ -49,7 +49,7 @@
           <p><strong>Extension:main</strong></p>
           <p>(using args attrib)</p>
           <div
-            extension-output
+            extension-point
             extension-name="main"
             extension-types="text link sanitize select"
             extension-args="{{items}}"></div>
@@ -63,7 +63,7 @@
           <p><strong>Extensions:foo, bar</strong></p>
           <p>but only select boxes</p>
           <div
-            extension-output
+            extension-point
             extension-name="foo bar"
             extension-types="select"></div>
 
@@ -89,7 +89,7 @@
       outline
       class="bg-white shadow-sm pad-lg">
       <div
-        extension-output
+        extension-point
         extension-name="footer"
         extension-types="text sanitize"></div>
     </div>
@@ -103,7 +103,7 @@
 <script src="../../src/extension-registry.js"></script>
 <script src="../../src/constants/extension-registry-utils.js"></script>
 <script src="../../src/services/extension-input-provider.js"></script>
-<script src="../../src/directives/extension-output.js"></script>
+<script src="../../src/directives/extension-point.js"></script>
 <script src="../../src/directives/extension-renderer.js"></script>
 <script src="../../dist/compiled-templates.js"></script>
 <!-- minified

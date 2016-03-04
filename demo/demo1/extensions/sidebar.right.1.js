@@ -1,7 +1,7 @@
 angular.module('myapp')
 .config([
-  'extensionInputProvider',
-  function(extensionInputProvider) {
+  'extensionRegistryProvider',
+  function(extensionRegistryProvider) {
 
     var extensionsSidebar = [
       {
@@ -16,6 +16,6 @@ angular.module('myapp')
       },
     ];
 
-    extensionInputProvider.register('sidebar-left', extensionsSidebar);
+    extensionRegistryProvider.register('sidebar-left', extensionsSidebar);
 
 }]);

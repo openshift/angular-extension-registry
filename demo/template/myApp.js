@@ -3,7 +3,7 @@ angular.module('myapp', [
 ])
 
 .config([
-  'extensionInputProvider',
+  'extensionRegistryProvider',
   function() {
     // nothing to do here, ATM
   }
