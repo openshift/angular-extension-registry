@@ -1,6 +1,13 @@
+# TODO:
+# - use travis to verify gulp min has been run & there is no diff
+# - use travis to run gulp test (once we have tests)
 language: node_js
 
 before_script:
-  - npm install -g gulp
+- npm install -g gulp
 
 script: gulp
+
+# not sure exactly how to test this
+# after_script:
+# - git status
