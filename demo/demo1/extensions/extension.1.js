@@ -10,7 +10,8 @@
       '$q',
       '$timeout',
       'extensionRegistry',
-      function($q, $timeout, extensionRegistry) {
+      'things',
+      function($q, $timeout, extensionRegistry, things) {
 
           // collecting all the registered extensions in an array
           var registries = [
@@ -135,6 +136,23 @@
                   target: '_blank'
                 },
               ]);
+            }),
+            // illustrates an actual service call using data from `/mocks`
+            extensionRegistry.register('thing', function(args) {
+              return things
+                      .get()
+                      .then(function(response) {
+                        var map = [];
+                        angular.forEach(response.data, function(item) {
+                          map.push({
+                            type: 'text',
+                            text: 'Hi, I am ' + item.name.first + ' ' + item.name.last
+                          });
+                        });
+                        console.log('map?', map);
+                        return map;
+                      });
+
             })
           ];
 
@@ -153,8 +171,10 @@
         });
 
         // deregistering will trigger a UI update & re-render
+        // will see items disappear on screen as this extension
+        // is eliminated
         $timeout(function() {
-          registries[0].deregister();
+          registries[1].deregister();
         }, 4000);
 
       }
