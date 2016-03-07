@@ -1,9 +1,14 @@
-angular.module('myapp', [
-  'extension-registry'
-])
+(function() {
+  'use strict';
+  
+  angular.module('myapp', [
+    'extension-registry'
+  ])
 
-.config([
-  function() {
-    // nothing to do here, ATM
-  }
-]);
+  .config([
+    function() {
+      // nothing to do here, ATM
+    }
+  ]);
+
+})();
