@@ -144,6 +144,14 @@
         extensionRegistry.register('thing');
         extensionRegistry.register('thing', []);
 
+        // the registry system is tolerant of errors to avoid one extension
+        // causing other extensions to fail.  registering an error or returning
+        // an error will do nothing.
+        extensionRegistry.register('thing', new Error('Oh no, it broke!'));
+        extensionRegistry.register('thing', function() {
+          return new Error('Oh no, bad things!!!!');
+        });
+
         // deregistering will trigger a UI update & re-render
         $timeout(function() {
           registries[0].deregister();
