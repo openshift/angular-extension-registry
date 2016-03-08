@@ -18,13 +18,13 @@
 
             // illustrates returning nothing, but using the extension hook to
             // do some arbitrary work with the provided args as context
-            extensionRegistry.register('thing', function(args) {
+            extensionRegistry.add('thing', function(args) {
               args.name.last = args.name.last.toUpperCase();
               return undefined;
             }),
 
             // illustrates returning a single object, rather than an array
-            extensionRegistry.register('thing', function(args) {
+            extensionRegistry.add('thing', function(args) {
               return {
                 type: 'text',
                 text: 'this is some text'
@@ -32,7 +32,7 @@
             }),
 
             // illustrates the html type
-            extensionRegistry.register('thing', function(args) {
+            extensionRegistry.add('thing', function(args) {
               return [
                 {
                   type: 'html',
@@ -46,7 +46,7 @@
             }),
 
             // illustrates returning a list rather than a single object
-            extensionRegistry.register('thing', function(args) {
+            extensionRegistry.add('thing', function(args) {
               return [
                 {
                   type: 'select',
@@ -78,7 +78,7 @@
 
             // illustrates returning a promise, such as would be done
             // if making an API call
-            extensionRegistry.register('thing', function(args) {
+            extensionRegistry.add('thing', function(args) {
               return $q.when([
                 {
                   type: 'link',
@@ -98,7 +98,7 @@
 
             // illustrates doing some arbitrary work & a promise for a
             // list of extensions....
-            extensionRegistry.register('thing', function(args) {
+            extensionRegistry.add('thing', function(args) {
               // doing a little arbitrary work inside a registered function
               var name;
               if(args) {
@@ -138,7 +138,7 @@
               ]);
             }),
             // illustrates an actual service call using data from `/mocks`
-            extensionRegistry.register('thing', function(args) {
+            extensionRegistry.add('thing', function(args) {
               return things
                       .get()
                       .then(function(response) {
@@ -159,14 +159,14 @@
 
         // test some side cases
         // you must register a function, but should not error out...
-        extensionRegistry.register('thing');
-        extensionRegistry.register('thing', []);
+        extensionRegistry.add('thing');
+        extensionRegistry.add('thing', []);
 
         // the registry system is tolerant of errors to avoid one extension
         // causing other extensions to fail.  registering an error or returning
         // an error will do nothing.
-        extensionRegistry.register('thing', new Error('Oh no, it broke!'));
-        extensionRegistry.register('thing', function() {
+        extensionRegistry.add('thing', new Error('Oh no, it broke!'));
+        extensionRegistry.add('thing', function() {
           return new Error('Oh no, bad things!!!!');
         });
 
@@ -174,8 +174,15 @@
         // will see items disappear on screen as this extension
         // is eliminated
         $timeout(function() {
-          registries[1].deregister();
+          // handle itself can remove itself
+          console.log('removing', 'registries[1]');
+          registries[1].remove();
         }, 4000);
+        $timeout(function() {
+          // extension registry also knows how to remove a handle
+          console.log('removing', 'registries[2]');
+          extensionRegistry.remove(registries[2]);
+        }, 8000);
 
       }
     ]);

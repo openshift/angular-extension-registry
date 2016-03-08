@@ -161,7 +161,7 @@ angular.module('extension-registry', [
                 fn && fn();
               });
             },
-            register = function(name, builderFn) {
+            add = function(name, builderFn) {
               var key = keyStart++;
               if(!registry[name]) {
                 registry[name] = {};
@@ -170,12 +170,21 @@ angular.module('extension-registry', [
                 registry[name][key] = builderFn;
                 notify();
               }
+              // handle.remove() will deregister, otherwise pass to:
+              // extensionRegistry.remove(handle)
               return {
-                deregister: function() {
+                _name: name,
+                _key: key,
+                remove: function() {
                   delete registry[name][key];
                   notify();
                 }
               };
+            },
+            // alt to handle.remove(), see above
+            remove = function(handle) {
+              delete registry[handle._name][handle._key];
+              notify();
             },
             dump = function() {
               return registry;
@@ -185,7 +194,7 @@ angular.module('extension-registry', [
             };
 
         // provider context export
-        this.register = register;
+        this.add = add;
         this.dump = dump;
         this.clean = clean;
 
@@ -195,7 +204,8 @@ angular.module('extension-registry', [
             '$q',
             function($log, $q) {
               return {
-                register: register,
+                add: add,
+                remove: remove,
                 get: function(names, filters, args, limit) {
                     return $q.all(
                               flatten(
