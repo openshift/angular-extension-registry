@@ -1,0 +1,71 @@
+<html ng-app="myapp">
+<head>
+  <title>Angular Extension Registry</title>
+  <!-- google fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en' rel='stylesheet' type='text/css'>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- layout engine -->
+  <link rel="stylesheet" href="../../bower_components/layout.attrs/dist/layout.attrs.css" />
+  <!-- theme -->
+  <link rel="stylesheet" href="./style.css" />
+  <style>
+    [outline] {
+     outline: 1px solid #DDD;
+    }
+    extension-renderer {
+      /*outline: 1px dashed #990000; */
+      background-color: #EDBCBC;
+    }
+
+  </style>
+</head>
+<body fit height-max class="bg-gray-lt font-roboto text-gray-dk">
+
+  <div fit scrollable layout column outline>
+
+    <div layout axis="center center" outline class="bg-white shadow-bottom-sm pad-lg">
+      <strong>Angular Extension Registry: List Items Demo</strong>
+    </div><!-- /heading -->
+
+
+    <div layout column ng-controller="list" style="margin-top: 50px">
+      <ul>
+        <li>Foo</li>
+        <li>Bar</li>
+        <ul
+          extension-point
+          extension-name="list"
+          extension-types="li text select"
+          extension-args="args"
+          extension-template="templ"></ul>
+      </ul>
+    </div>
+
+  </div>
+
+
+
+  <!-- vendor -->
+  <script src="../../bower_components/angular/angular.js"></script>
+  <script src="../../bower_components/angular-sanitize/angular-sanitize.js"></script>
+  <!-- angular-extension-manager components
+  <script>console.warn('using unminified');</script>
+  <script src="../../src/extension-registry.js"></script>
+  <script src="../../src/constants/extension-registry-utils.js"></script>
+  <script src="../../src/services/extension-input-provider.js"></script>
+  <script src="../../src/directives/extension-point.js"></script>
+  <script src="../../src/directives/extension-renderer.js"></script>
+  <script src="../../dist/compiled-templates.js"></script>
+   -->
+  <!-- minified -->
+  <script>console.info('using minified');</script>
+  <script src="../../dist/angular-extension-registry.js"></script>
+  <script src="../../dist/compiled-templates.js"></script>
+
+  <script src="./myApp.js"></script>
+  <script src="./extensions/extension.1.js"></script>
+
+
+</body>
+</html>

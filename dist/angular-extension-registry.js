@@ -202,8 +202,15 @@ angular.module('extension-registry', [
         this.$get = [
             '$log',
             '$q',
-            function($log, $q) {
+            '$templateCache',
+            function($log, $q, $templateCache) {
               return {
+                // helper for registering new type templates with $templateCache
+                // using a fn to generate rather than inline in view avoids
+                // $sce issues due to string interpolation.
+                addType: function(type, tpl) {
+                  $templateCache.put('__extension-'+type+'.html', tpl);
+                },
                 add: add,
                 remove: remove,
                 get: function(names, filters, args, limit) {
@@ -266,57 +273,57 @@ angular.module('extension-registry', [
 
   angular
     .module('extension-registry')
-    .directive('extensionPoint', function() {
-      return {
-        restrict: 'EA',
-        scope: {
-          extensionName: '=',
-          extensionFilters: '=',
-          extensionArgs: '=',
-          extensionLimit: '='
-        },
-        transclude: true,
-        templateUrl: '__extension-point.html',
-        controller: [
-          '$scope',
-          '$q',
-          'extensionRegistry',
-          function($scope, $q, extensionRegistry) {
-            this.initialize = function(name, filters) {
-              var resolve = function() {
-                $q
-                  .when(extensionRegistry.get(name, filters, $scope.extensionArgs, Number($scope.extensionLimit)))
-                  .then(function(items) {
-                    angular.extend($scope, {
-                      items: items
+    .directive('extensionPoint', [
+      function() {
+        return {
+          restrict: 'EA',
+          scope: {
+            extensionName: '=',
+            extensionFilters: '=',
+            extensionArgs: '=',
+            extensionLimit: '='
+          },
+          transclude: true,
+          templateUrl: '__extension-point.html',
+          controller: [
+            '$scope',
+            '$q',
+            'extensionRegistry',
+            function($scope, $q, extensionRegistry) {
+              this.initialize = function(name, filters) {
+                var resolve = function() {
+                  $q
+                    .when(extensionRegistry.get(name, filters, $scope.extensionArgs, Number($scope.extensionLimit)))
+                    .then(function(items) {
+                      angular.extend($scope, {
+                        items: items
+                      });
                     });
-                  });
-                };
+                  };
 
-              resolve();
+                resolve();
 
-              var registry = extensionRegistry.subscribe(resolve);
-              $scope.$on('$destroy', function() {
-                registry.unsubscribe();
-              });
-            };
+                var registry = extensionRegistry.subscribe(resolve);
+                $scope.$on('$destroy', function() {
+                  registry.unsubscribe();
+                });
+              };
+            }
+          ],
+          link: function($scope, $elem, $attrs, ctrl) {
+            var name = $attrs.extensionName,
+                filters = $attrs.extensionTypes && $attrs.extensionTypes.split(' ') || [],
+                args = $attrs.extensionArgs || {};
+            ctrl.initialize(name, filters, args);
           }
-        ],
-        link: function($scope, $elem, $attrs, ctrl) {
-          var name = $attrs.extensionName,
-              filters = $attrs.extensionTypes && $attrs.extensionTypes.split(' ') || [],
-              args = $attrs.extensionArgs || {};
-
-          ctrl.initialize(name, filters, args);
-        }
-      };
-    });
-
+        };
+      }
+    ]);
 })();
 
 (function() {
   'use strict';
-  
+
   angular.module('extension-registry')
     .directive('extensionRenderer', function() {
       return {
@@ -326,7 +333,12 @@ angular.module('extension-registry', [
           index: '=',
           context: '='
         },
-        templateUrl: '__extension-renderer.html'
+        templateUrl: '__extension-renderer.html',
+        link: function($scope) {
+          $scope.extTpl = function(type) {
+            return '__extension-'+type+'.html';
+          };
+        }
       };
     });
 })();
