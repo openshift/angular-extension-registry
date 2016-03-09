@@ -50,9 +50,9 @@ Output points must be defined in the views like this:
 Then the service can be used to register data objects for render.  Two-way data
 binding will apply, output will re-render whenever the UI changes:
 
-### Built in formats
+### Built in types
 
-Currently, there are 4 types of objects supported.  Some quick vanilla examples:
+Currently, there are 4 built-in extension types.  Some quick vanilla examples:
 
 ```javascript
 
@@ -109,6 +109,20 @@ Currently, there are 4 types of objects supported.  Some quick vanilla examples:
 }
 
 ```
+
+### Adding custom types
+
+To add a new type, you must name the type & provide a template for rendering.
+Templates are given a model object called `item`.
+
+Example of adding a new type:
+
+```javascript
+extensionRegistry.addType('li', '<li>{{item.text}}</li>');
+
+```
+
+This will register the template with angular's `$templateCache` for use whenever the extension point is needed.  Templates are registered as `__extension-<type-name>.html`.  
 
 
 ### Data registration
@@ -235,6 +249,3 @@ Clone the project, `npm install` and `bower install`.  Run a simple server with
 `python -m SimpleHTTPServer` (or whatever server you prefer) and navigate to
 `http://localhost:8000/demo/` (check the port, depends on the server you use).
 There are a few trivial examples of usage in this directory.
-
-
-
