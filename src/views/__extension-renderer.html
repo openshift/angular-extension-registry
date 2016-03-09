@@ -1,15 +1,1 @@
-<div
-  ng-switch on="item.type">
-  <div ng-switch-when="text">
-    <div ng-include=" '__extension-text.html' "></div>
-  </div>
-  <div ng-switch-when="link">
-    <div ng-include=" '__extension-link.html' "></div>
-  </div>
-  <div ng-switch-when="select">
-    <div ng-include=" '__extension-select.html' "></div>
-  </div>
-  <div ng-switch-when="html">
-    <div ng-include=" '__extension-html.html' "></div>
-  </div>
-</div>
+<ng-include src="extTpl(item.type)"></ng-include>

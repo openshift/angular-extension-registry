@@ -1,6 +1,6 @@
 (function() {
   'use strict';
-  
+
   angular.module('extension-registry')
     .directive('extensionRenderer', function() {
       return {
@@ -10,7 +10,12 @@
           index: '=',
           context: '='
         },
-        templateUrl: '__extension-renderer.html'
+        templateUrl: '__extension-renderer.html',
+        link: function($scope) {
+          $scope.extTpl = function(type) {
+            return '__extension-'+type+'.html';
+          };
+        }
       };
     });
 })();

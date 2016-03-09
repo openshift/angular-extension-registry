@@ -69,8 +69,15 @@
         this.$get = [
             '$log',
             '$q',
-            function($log, $q) {
+            '$templateCache',
+            function($log, $q, $templateCache) {
               return {
+                // helper for registering new type templates with $templateCache
+                // using a fn to generate rather than inline in view avoids
+                // $sce issues due to string interpolation.
+                addType: function(type, tpl) {
+                  $templateCache.put('__extension-'+type+'.html', tpl);
+                },
                 add: add,
                 remove: remove,
                 get: function(names, filters, args, limit) {

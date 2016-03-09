@@ -149,7 +149,6 @@
                             text: 'Hi, I am ' + item.name.first + ' ' + item.name.last
                           });
                         });
-                        console.log('map?', map);
                         return map;
                       });
 
