@@ -125,6 +125,18 @@ extensionRegistry.addType('li', '<li>{{item.text}}</li>');
 This will register the template with angular's `$templateCache` for use whenever the extension point is needed.  Templates are registered as `__extension-<type-name>.html`.  
 
 
+### Other return types
+
+A registered callback function can return any of the following:
+
+- inapplicable, undefined
+- simple, object
+- simple, array
+- complex, promise
+
+A function that returns nothing may be used to instead manipulate the data.  It is encouraged to be a good citizen, of course.  Changing data that will be used by other registered extensions could have undesirable consequences.
+
+
 ### Data registration
 
 Registering the data objects to a specific endpoint happens via a registration
@@ -136,7 +148,7 @@ promise, data, etc.
 // args is an object set via the directive in the view.
 // likely it is some object on a controller scope that gives
 // meaning to the endpoint.
-extensionRegistry.register('endpoint1', function(args) {
+extensionRegistry.add('endpoint1', function(args) {
   return $q.when([
     // my objects
   ]);
@@ -158,7 +170,7 @@ angular.module('myapp')
 
       // args is provided via the directive attrib extension-args="some_object"
       // and can be used to customize the data objects that will be rendered
-      extensionRegistry.register('register1', function(args) {
+      extensionRegistry.add('register1', function(args) {
         // simulate async (service calls, etc)
         return $q.when([
           // add a single link, assuming the args to the directive will provide
@@ -173,7 +185,7 @@ angular.module('myapp')
       });
 
       // multiple items registered
-      extensionRegistry.register('register1', function(args) {
+      extensionRegistry.add('register1', function(args) {
         return $q.when([
           {
             type: 'link',
@@ -195,16 +207,21 @@ angular.module('myapp')
 
 ```
 
-For organizational purposes, register endpoints ahead of time:
+It is perfectly fine to register endpoints ahead of time, then later register additional callbacks.  Example:
 
 ```javascript
 
-extensionRegistry.register('sidebar-left');
-extensionRegistry.register('main');
-extensionRegistry.register('footer');
-extensionRegistry.register('foo');
-extensionRegistry.register('bar');
-extensionRegistry.register('shizzle');
+extensionRegistry.add('sidebar-left');
+extensionRegistry.add('main');
+extensionRegistry.add('footer');
+extensionRegistry.add('foo');
+extensionRegistry.add('bar');
+extensionRegistry.add('shizzle');
+
+// then elsewhere:
+extensionRegistry.add('foo', function(args) {
+  // do stuff...
+}).
 
 ```
 
@@ -212,24 +229,24 @@ It is fine to register multiple callbacks to an endpoint:
 
 ```javascript
 
-extensionRegistry.register('endpoint1', function() {  return [ /* stuff */ ] });
-extensionRegistry.register('endpoint1', function() {  return [ /* stuff2 */ ] });
-extensionRegistry.register('endpoint1', function() {  return [ /* stuff3 */ ] });
-extensionRegistry.register('endpoint1', function() {  return [ /* stuff4 */ ] });
+extensionRegistry.add('endpoint1', function() {  return [ /* stuff */ ] });
+extensionRegistry.add('endpoint1', function() {  return [ /* stuff2 */ ] });
+extensionRegistry.add('endpoint1', function() {  return [ /* stuff3 */ ] });
+extensionRegistry.add('endpoint1', function() {  return [ /* stuff4 */ ] });
 ```
 
 ### Deregistering data
 
-Each time you register data to a registry, the `.register()` function will return an object that
-has a `.deregister()` function bound to that particular data set, allowing you to unregister that
-block of data.  Calling `.deregister()` does not clear an entire registry, ONLY the data that was
+Each time you register data to a registry, the `.add()` function will return an object that
+has a `.remove()` function bound to that particular data set, allowing you to unregister that
+block of data.  Calling `.remove()` does not clear an entire registry, ONLY the data that was
 registered in that data set.
 
 ```javascript
-var reg = extensionRegistry.register('endpoint1', function() {  return [ /* stuff */ ] });
+var reg = extensionRegistry.add('endpoint1', function() {  return [ /* stuff */ ] });
 
 // nah, actually we don't want this anymore.
-reg.deregister();
+reg.remove();
 
 ```
 
