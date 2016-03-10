@@ -6,8 +6,7 @@ language: node_js
 before_script:
 - npm install -g gulp
 
-script: gulp
+script: gulp min
 
-# not sure exactly how to test this
 # after_script:
 # - git status
