@@ -338,10 +338,8 @@ angular.module('extension-registry', [
           $scope.extTpl = function(type) {
             return '__extension-'+type+'.html';
           };
-          console.log('$scope.item', $scope.item);
           if($scope.item.type === 'dom') {
-            console.log('$scope.item.dom', $scope.item.dom);
-            $elem.append($scope.item.dom);
+            $elem.append($scope.item.node);
           }
         }
       };
