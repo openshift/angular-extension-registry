@@ -16,7 +16,7 @@
             return '__extension-'+type+'.html';
           };
           if($scope.item.type === 'dom') {
-            $elem.append($scope.item.dom);
+            $elem.append($scope.item.node);
           }
         }
       };
