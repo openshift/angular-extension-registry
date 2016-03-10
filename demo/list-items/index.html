@@ -13,6 +13,11 @@
     [outline] {
      outline: 1px solid #DDD;
     }
+
+    .outline-red {
+      border: 1px dashed #990000;
+    }
+
     extension-renderer {
       /*outline: 1px dashed #990000; */
       background-color: #EDBCBC;
@@ -36,7 +41,7 @@
         <ul
           extension-point
           extension-name="list"
-          extension-types="li text select"
+          extension-types="li text select dom"
           extension-args="args"
           extension-template="templ"></ul>
       </ul>
@@ -47,6 +52,7 @@
 
 
   <!-- vendor -->
+  <script src="../../bower_components/jquery/dist/jquery.js"></script>
   <script src="../../bower_components/angular/angular.js"></script>
   <script src="../../bower_components/angular-sanitize/angular-sanitize.js"></script>
   <!-- angular-extension-manager components

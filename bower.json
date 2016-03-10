@@ -4,7 +4,7 @@
   "authors": [
     "benjaminapetersen <admin@benjaminapetersen.me>"
   ],
-  "main" : [
+  "main": [
     "dist/angular-extension-registry.min.js",
     "dist/compiled-templates.js"
   ],
@@ -20,6 +20,7 @@
   "devDependencies": {
     "angular": "~1.4.1",
     "layout.attrs": "~1.0.0",
-    "angular-sanitize": "~1.4.3"
+    "angular-sanitize": "~1.4.3",
+    "jquery": "~2.2.1"
   }
 }

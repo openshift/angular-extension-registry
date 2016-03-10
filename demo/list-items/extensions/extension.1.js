@@ -32,6 +32,12 @@
           }, {
             type: 'li',
             text: 'Random: ' + args[(Math.floor(Math.random() * (args.length-1)) + 0)]
+          }, {
+            type: 'dom',
+            dom: $('<div>')
+                    .addClass('outline-red')
+                    .append('<span>')
+                    .text('Hello world')
           }];
         });
 
