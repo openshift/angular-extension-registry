@@ -334,10 +334,15 @@ angular.module('extension-registry', [
           context: '='
         },
         templateUrl: '__extension-renderer.html',
-        link: function($scope) {
+        link: function($scope, $elem) {
           $scope.extTpl = function(type) {
             return '__extension-'+type+'.html';
           };
+          console.log('$scope.item', $scope.item);
+          if($scope.item.type === 'dom') {
+            console.log('$scope.item.dom', $scope.item.dom);
+            $elem.append($scope.item.dom);
+          }
         }
       };
     });

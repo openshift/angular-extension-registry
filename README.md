@@ -106,6 +106,15 @@ Currently, there are 4 built-in extension types.  Some quick vanilla examples:
   onChange: function(item) {
     console.log('selected', item);
   }
+},
+// type: dom
+// NOTE: can return a jQuery object
+{
+  type: 'dom',
+  dom: $('<div>')
+          .addClass('outline-red')
+          .append('<span>')
+          .text('Hello world')
 }
 
 ```
