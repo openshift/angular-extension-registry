@@ -111,7 +111,7 @@ Currently, there are 4 built-in extension types.  Some quick vanilla examples:
 // NOTE: can return a jQuery object
 {
   type: 'dom',
-  dom: $('<div>')
+  node: $('<div>')
           .addClass('outline-red')
           .append('<span>')
           .text('Hello world')
