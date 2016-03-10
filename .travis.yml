@@ -5,8 +5,8 @@ language: node_js
 
 before_script:
 - npm install -g gulp
+# creates ./.tmp/build to test against ./dist
+- gulp prep-diff
 
-script: gulp min
-
-# after_script:
-# - git status
+# Only in ./dist: errors mean the prep-diff task has not run
+script: ./validate.sh
