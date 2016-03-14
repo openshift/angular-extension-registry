@@ -113,6 +113,32 @@ Currently, there are 4 built-in extension types.  Some quick vanilla examples:
           .addClass('outline-red')
           .append('<span>')
           .text('Hello world')
+},
+// and can be as complex as desired:
+{
+  type: 'dom',
+  // arbitrary keys can be added to the object, these will be
+  // accessible via node once rendered
+  url: 'http://www.google.com',
+  onClick: function() {
+    $window.open(this.url, '_blank');
+  },
+  node: [
+    '<div row ',
+      'ng-show="item.url" ',
+      'class="foo" ',
+      'title="A link title">',
+        '<div>',
+          '<i class="fa fa-share" aria-hidden="true"></i>',
+        '</div>',
+        '<div>',
+          '<a ng-click="item.onClick($event)" ',
+            'ng-href="item.url">',
+            'Open some link',
+          '</a>',
+        '</div>',
+      '</div>'
+  ].join('')
 }
 
 
