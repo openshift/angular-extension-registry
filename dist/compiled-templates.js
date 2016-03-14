@@ -1,5 +1,5 @@
 angular.module("extension-registry").run(["$templateCache", function($templateCache) {$templateCache.put("__extension-dom.html","");
-$templateCache.put("__extension-html.html","<div\n  ng-bind-html=\"item.html\"\n  class=\"extension-sanitize extension-html extension-{{index}} {{item.className}}\"></div>\n");
+$templateCache.put("__extension-html.html","œ\n");
 $templateCache.put("__extension-link.html","<a ng-if=\"!item.onClick\"\n   ng-href=\"{{item.href}}\"\n   target=\"{{item.target}}\"\n   title=\"{{item.linkText}}\"\n   class=\"extension-link extension-{{index}} {{item.className}}\">\n   {{item.linkText}}\n </a>\n\n<a ng-if=\"item.onClick\"\n   ng-href=\"#\"\n   ng-click=\"item.onClick(args)\"\n   title=\"{{item.linkText}}\"\n   class=\"extension-link extension-{{index}} {{item.className}}\">\n   {{item.linkText}}\n </a>\n");
 $templateCache.put("__extension-point.html","<extension-renderer\n  ng-repeat=\"item in items track by $index\"\n  class=\"extension-renderer extension-item\"\n  item=\"item\"\n  index=\"$index\"\n  args=\"args\"></extension-renderer>\n");
 $templateCache.put("__extension-renderer.html","<ng-include src=\"extTpl(item.type)\"></ng-include>\n");

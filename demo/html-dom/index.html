@@ -34,16 +34,15 @@
     </div><!-- /heading -->
 
 
-    <div layout column ng-controller="list" style="margin-top: 50px">
-      <ul>
-        <li>Foo</li>
-        <li>Bar</li>
-        <ul
-          extension-point
-          extension-name="list"
-          extension-types="li text select dom"
-          extension-args="args"></ul>
-      </ul>
+    <div layout column ng-controller="myController" style="margin-top: 50px">
+      <div>
+        Count test:  <span ng-repeat="item in items">{{item}},</span>
+      </div>
+      <div
+        extension-point
+        extension-name="dom-nodes"
+        extension-types="dom"></div>
+
     </div>
 
   </div>
@@ -62,14 +61,13 @@
   <script src="../../src/directives/extension-point.js"></script>
   <script src="../../src/directives/extension-renderer.js"></script>
   <script src="../../dist/compiled-templates.js"></script>
-   -->
-  <!-- minified -->
+ -->
+  <!-- minified-->
   <script>console.info('using minified');</script>
   <script src="../../dist/angular-extension-registry.js"></script>
   <script src="../../dist/compiled-templates.js"></script>
 
   <script src="./myApp.js"></script>
-  <script src="./extensions/extension.1.js"></script>
 
 
 </body>

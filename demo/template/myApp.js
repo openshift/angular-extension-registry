@@ -3,8 +3,10 @@ angular.module('myapp', [
 ])
 
 .config([
-  'extensionRegistryProvider',
   function() {
     // nothing to do here, ATM
   }
-]);
+])
+.controller('myController', function() {
+  console.log('hello', 'world');
+});

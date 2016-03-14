@@ -61,14 +61,7 @@ Currently, there are 4 built-in extension types.  Some quick vanilla examples:
   type: 'text',
   className: 'my-text',
   text: 'This is some text.'
-},
-// type: html
-// NOTE: html requires ng-sanitize module as the html must be rendered
-{
-  type: 'html',
-  className: 'my-class',
-  html: '<p><strong>Stuff</strong> and things.</p>'
-},
+}
 // type: link
 {
   type: 'link',
@@ -108,7 +101,12 @@ Currently, there are 4 built-in extension types.  Some quick vanilla examples:
   }
 },
 // type: dom
-// NOTE: can return a jQuery object
+// NOTE: node: '' can be a jQuery object, or a plain string
+{
+  type: 'dom',
+  node: '<div>Hello World</div>'
+},
+// or
 {
   type: 'dom',
   node: $('<div>')
@@ -116,6 +114,7 @@ Currently, there are 4 built-in extension types.  Some quick vanilla examples:
           .append('<span>')
           .text('Hello world')
 }
+
 
 ```
 
