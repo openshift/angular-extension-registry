@@ -7,6 +7,7 @@
       function($compile) {
         return {
           restrict: 'AE',
+          //replace: true,
           scope: {
             item: '=',
             index: '=',
@@ -18,7 +19,7 @@
               return '__extension-'+type+'.html';
             };
             if($scope.item.type === 'dom') {
-              $elem.append($scope.item.node);
+              $elem.html($scope.item.node);
               $compile($elem.contents())($scope);
             }
           }

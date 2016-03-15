@@ -4,7 +4,14 @@
   angular
     .module('extension-registry')
     .directive('extensionPoint', [
-      function() {
+      '$compile',
+      '$templateCache',
+      'extensionRegistryUtils',
+      function($compile, $templateCache, utils) {
+        var each = utils.each,
+            tplPath =  function(type) {
+              return '__extension-'+type+'.html';
+            };
         return {
           restrict: 'EA',
           scope: {
@@ -20,17 +27,28 @@
             '$q',
             'extensionRegistry',
             function($scope, $q, extensionRegistry) {
-              this.initialize = function(name, filters) {
+              this.initialize = function($elem, name, filters) {
                 var resolve = function() {
-                  $q
-                    .when(extensionRegistry.get(name, filters, $scope.extensionArgs, Number($scope.extensionLimit)))
-                    .then(function(items) {
-                      angular.extend($scope, {
-                        items: items
-                      });
-                    });
-                  };
+                                $q
+                                  .when(extensionRegistry
+                                          .get(name, filters, $scope.extensionArgs, Number($scope.extensionLimit)))
+                                  .then(function(items) {
+                                    $elem.html('');
+                                    each(items, function(item) {
+                                      $elem
+                                        .append(
+                                          $compile(
+                                            (item.type === 'dom') ?
+                                                       item.node :
+                                                       $templateCache.get(tplPath(item.type))
+                                          )(angular
+                                            .extend(
+                                              $scope.$new(true),
+                                              {item: item})));
 
+                                    });
+                                  });
+                              };
                 resolve();
 
                 var registry = extensionRegistry.subscribe(resolve);
@@ -44,7 +62,12 @@
             var name = $attrs.extensionName,
                 filters = $attrs.extensionTypes && $attrs.extensionTypes.split(' ') || [],
                 args = $attrs.extensionArgs || {};
-            ctrl.initialize(name, filters, args);
+
+            angular.extend($scope, {
+              extTpl: tplPath
+            });
+
+            ctrl.initialize($elem, name, filters, args);
           }
         };
       }

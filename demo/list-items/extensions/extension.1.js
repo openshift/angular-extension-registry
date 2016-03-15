@@ -32,12 +32,17 @@
           }, {
             type: 'li',
             text: 'Random: ' + args[(Math.floor(Math.random() * (args.length-1)) + 0)]
-          }, {
+          },
+          // NOTE: with 'replace', this will not work!
+          {
             type: 'dom',
             node: $('<div>')
                     .addClass('outline-red')
                     .append('<span>')
-                    .text('Hello world')
+                    .text('Hello world (not an li)')
+          }, {
+            type: 'dom',
+            node: '<li><div>Foo bar baz!</div></li>'
           }];
         });
 
