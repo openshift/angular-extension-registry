@@ -175,12 +175,12 @@
         $timeout(function() {
           // handle itself can remove itself
           console.log('removing', 'registries[1]');
-          registries[1].remove();
+          registries[1] && registries[1].remove();
         }, 4000);
         $timeout(function() {
           // extension registry also knows how to remove a handle
           console.log('removing', 'registries[2]');
-          extensionRegistry.remove(registries[2]);
+          registries[2] && extensionRegistry.remove(registries[2]);
         }, 8000);
 
       }
