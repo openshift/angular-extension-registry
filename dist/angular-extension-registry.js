@@ -1,5 +1,4 @@
 angular.module('extension-registry', [
-  'ngSanitize',
   'extension-registry-utils'
 ]);
 
@@ -291,7 +290,6 @@ angular.module('extension-registry', [
             extensionLimit: '='
           },
           transclude: true,
-          templateUrl: '__extension-point.html',
           controller: [
             '$scope',
             '$q',

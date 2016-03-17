@@ -1,6 +1,4 @@
 angular.module("extension-registry").run(["$templateCache", function($templateCache) {$templateCache.put("__extension-dom.html","");
 $templateCache.put("__extension-link.html","<a ng-if=\"!item.onClick\"\n   ng-href=\"{{item.href}}\"\n   target=\"{{item.target}}\"\n   title=\"{{item.linkText}}\"\n   class=\"extension-link extension-{{index}} {{item.className}}\">\n   {{item.linkText}}\n </a>\n\n<a ng-if=\"item.onClick\"\n   ng-href=\"#\"\n   ng-click=\"item.onClick(args)\"\n   title=\"{{item.linkText}}\"\n   class=\"extension-link extension-{{index}} {{item.className}}\">\n   {{item.linkText}}\n </a>\n");
-$templateCache.put("__extension-point.html","<!--\n<extension-renderer\n  ng-repeat=\"item in items track by $index\"\n  class=\"extension-renderer extension-item\"\n  item=\"item\"\n  index=\"$index\"\n  args=\"args\"></extension-renderer>\n-->\n");
-$templateCache.put("__extension-renderer.html","<ng-include src=\"extTpl(item.type)\"></ng-include>\n");
 $templateCache.put("__extension-select.html","<select\n  name=\"item.nameText\"\n  ng-model=\"selected\"\n  ng-init=\"selected = item.options[0]\"\n  ng-change=\"item.onChange(selected)\"\n  class=\"extension-select extension-{{index}} {{item.className}}\"\n  ng-options=\"foo.label for foo in item.options\"></select>\n");
 $templateCache.put("__extension-text.html","<span>{{item.text}}</span>\n");}]);
