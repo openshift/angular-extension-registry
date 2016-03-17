@@ -35,8 +35,8 @@
             extensionRegistry.add('thing', function(args) {
               return [
                 {
-                  type: 'html',
-                  html: [
+                  type: 'dom',
+                  node: [
                           '<div>',
                           args.name.first,
                           ' is an employee.'
