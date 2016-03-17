@@ -21,7 +21,6 @@
             extensionLimit: '='
           },
           transclude: true,
-          templateUrl: '__extension-point.html',
           controller: [
             '$scope',
             '$q',
