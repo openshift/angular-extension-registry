@@ -296,7 +296,11 @@ is with a build tool, such as gulp's `gulp-angular-templatecache` plugin.
 
 ### View the demos
 
-Clone the project, `npm install` and `bower install`.  Run a simple server with
-`python -m SimpleHTTPServer` (or whatever server you prefer) and navigate to
-`http://localhost:8000/demo/` (check the port, depends on the server you use).
-There are a few trivial examples of usage in this directory.
+Clone the project, then run the following from the root directory:
+
+`npm install`
+`bower install`
+`gulp serve`
+
+This will load a file in your browser with links to the `/demos` directory.  Feel free to experiment
+with these examples.
