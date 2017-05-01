@@ -6,8 +6,13 @@
   ])
 
   .config([
-    function() {
-      // nothing to do here, ATM
+    'extensionRegistryUtils',
+    'extensionRegistryProvider',
+    function(utils, extensionRegistryProvider) {
+      // show that `add()` works up-front
+      extensionRegistryProvider.add('list', function() {
+        return [{type:"li", text: 'Lalala',    weight: 1  }];
+      });
     }
   ])
 
@@ -24,6 +29,6 @@
       //  <extension-point extension-type="text <new-type>"
       extensionRegistry.addType('li', '<li>{{item.text}}</li>');
     }
-  ])
+  ]);
 
 })();
