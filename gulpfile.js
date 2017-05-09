@@ -11,7 +11,10 @@ var gulp = require('gulp'),
     del = require('del'),
     browserSync = require('browser-sync'),
     reload = browserSync.reload,
-    templateCache = require('gulp-angular-templatecache');
+    templateCache = require('gulp-angular-templatecache'),
+    gulpProtractorAngular = require('gulp-angular-protractor'),
+    KarmaServer = require('karma').Server,
+    shell = require('gulp-shell');
 
 var match = {
   recurse: '**/*'
@@ -21,7 +24,9 @@ var src = './src/',
     dist = './dist/',
     demos = './demo/',
     tmp = './.tmp/',
-    tmpBuild = tmp + 'build/';
+    tmpBuild = tmp + 'build/',
+    test = './test/',
+    testRelative = '/test/';
 
 var srcAll = src + match.recurse,
     distAll = dist +match.recurse,
@@ -42,6 +47,11 @@ var buildSource = [
     src + 'directives/extension-renderer.js'
   ];
 
+var protocol = 'http://',
+    host = 'localhost',
+    serverPort = 9005,
+    // will use when we setup e2e-test
+    baseUrl = protocol + host + ':' + serverPort;
 
 var concatSource = function(outputDest) {
   return gulp
@@ -128,5 +138,41 @@ gulp.task('prep-diff', ['_tmp-min'], function() {
   // nothing here atm.
 });
 
+gulp.task('validate-dist', ['prep-diff'], function() {
+  // validation script to verify ./dist and ./tmp/build are equals
+  shell.task([
+    './validate.sh'
+  ])();
+});
+
+// gulp.task('test-e2e', ['serve'], function(callback) {
+//     gulp
+//         .src(['example_spec.js'])
+//         .pipe(gulpProtractorAngular({
+//             configFile: test + 'protractor.conf.js',
+//             // baseUrl is needed for tests to navigate via relative paths
+//             args: ['--baseUrl', baseUrl],
+//             debug: false,
+//             autoStartStopServer: true
+//         }))
+//         .on('error', function(e) {
+//             console.log(e);
+//         })
+//         .on('end', callback);
+// });
+
+// for integration testing, uses phantomJS
+gulp.task('test-unit', function(done) {
+    new KarmaServer({
+      configFile:  __dirname  + testRelative + 'karma.conf.js',
+      port: serverPort
+      // browsers: ['PhantomJS'] - try the firefox default?
+    }, done).start();
+});
+
+// run all the tests, unit first, then e2e
+gulp.task('test', ['test-unit'], function() {
+  // just runs the other tests
+});
 
 gulp.task('default', ['min', 'serve']);
