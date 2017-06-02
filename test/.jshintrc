@@ -29,6 +29,7 @@
     "injector": false,
     "describe": false,
     "it": false,
+    "xit": false,
     "beforeEach": false,
     "afterEach": false,
     "expect": false,
