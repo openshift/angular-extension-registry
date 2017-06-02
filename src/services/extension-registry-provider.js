@@ -36,6 +36,13 @@
               if(builderFn && isFunction(builderFn)) {
                 registry[name][key] = builderFn;
                 notify();
+              } else {
+                // supports convenience of add('name', object)
+                // if builderFn isn't a fn, wrap the object 
+                registry[name][key] = function() {
+                  return builderFn;
+                };
+                notify();
               }
               // handle.remove() will deregister, otherwise pass to:
               // extensionRegistry.remove(handle)
