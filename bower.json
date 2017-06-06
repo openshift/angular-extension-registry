@@ -20,6 +20,8 @@
   "devDependencies": {
     "angular": "~1.4.1",
     "layout.attrs": "~1.0.0",
-    "jquery": "~2.2.1"
+    "jquery": "~2.2.1",
+    "angular-mocks": "~1.4.1",
+    "lodash": "^4.17.4"
   }
 }

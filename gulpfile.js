@@ -14,7 +14,14 @@ var gulp = require('gulp'),
     templateCache = require('gulp-angular-templatecache'),
     gulpProtractorAngular = require('gulp-angular-protractor'),
     KarmaServer = require('karma').Server,
-    shell = require('gulp-shell');
+    shell = require('gulp-shell'),
+    argv = require('yargs').argv;
+
+// process.argv is an option for collecting cli arguments, but not ideal.
+var browsers = argv.browsers ?
+                  argv.browsers.split(',') :
+                  // PhantomJS, Chrome, Firefox, etc
+                  ['Firefox'];
 
 var match = {
   recurse: '**/*'
@@ -165,8 +172,8 @@ gulp.task('validate-dist', ['prep-diff'], function() {
 gulp.task('test-unit', function(done) {
     new KarmaServer({
       configFile:  __dirname  + testRelative + 'karma.conf.js',
-      port: serverPort
-      // browsers: ['PhantomJS'] - try the firefox default?
+      port: serverPort,
+      browsers: browsers,
     }, done).start();
 });
 
