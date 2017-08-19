@@ -4,4 +4,4 @@
   ng-init="selected = item.options[0]"
   ng-change="item.onChange(selected)"
   class="extension-select extension-{{index}} {{item.className}}"
-  ng-options="foo.label for foo in item.options"></select>
+  ng-options="option.label for option in item.options"></select>
