@@ -70,22 +70,21 @@
                     <div ng-repeat="friend in item.friends" flex class="card card-grey friend">
                       <div>name: {{friend.name.first}}</div>
                       <div
-                        extension-point
-                        extension-name="thing"
-                        extension-types="text link"
-                        extension-args="friend"
+                        extension-point="register1 register2"
+                        extension-types="text link select html"
+                        extension-args="a_relevant_object_for_context"
                         extension-limit="2"></div>
-                    </div>
+                        </div>
                   </div>
                 </div>
               </div>
               <div>
                 <h4>Extension Example 2:</h4>
                 <div
-                  extension-point
-                  extension-name="thing"
-                  extension-types="text link select html"
-                  extension-args="item"></div>
+                extension-point="register1 register2"
+                extension-types="text link select html"
+                extension-args="a_relevant_object_for_context"
+                extension-limit="2"></div>
               </div>
             </div>
 
