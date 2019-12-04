@@ -2,6 +2,13 @@
 
 An angular module that provides a plugin registry system for arbitrarily injecting additional UI components into views.  A primary use case would be allowing developers to add components to an application without compiling the extension point files into the actual application.
 
+## Contribute
+
+If you have any ideas for improvement or have found a bug, do not hesitate to open an issue.
+And if you have time, clone this repo and submit a pull request to help angular-extension-registry plugin the best it can be.
+
+Read the [contributing](https://raw.githubusercontent.com/openshift/grafana/master/CONTRIBUTING.md) guide for best practices on contributing to this project. 
+
 ## Usage
 
 Include the minified script in your html file.  If you want to use the pre-compiled default
